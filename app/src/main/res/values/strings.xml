@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Mareu</string>
+    <string name="by_date">Par date</string>
+    <string name="by_place">Par lieu</string>
+</resources>
