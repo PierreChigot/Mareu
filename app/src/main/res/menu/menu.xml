@@ -3,18 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <group android:checkableBehavior="single">
     <item
-        android:id="@+id/filter_favorite"
+        android:id="@+id/sort_date"
         android:title="@string/by_date"
         app:showAsAction="never"
         />
 
     <item
-        android:id="@+id/filter_myProject"
+        android:id="@+id/sort_place"
         android:title="@string/by_place"
         app:showAsAction="never"
 
         />
     </group>
-
-
 </menu>
