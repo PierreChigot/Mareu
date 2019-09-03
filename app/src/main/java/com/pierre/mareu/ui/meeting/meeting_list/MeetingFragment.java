@@ -14,6 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.pierre.mareu.R;
+import com.pierre.mareu.di.DI;
+import com.pierre.mareu.model.Meeting;
+import com.pierre.mareu.service.MeetingAPIService;
 import com.pierre.mareu.ui.meeting.meeting_list.dummy.DummyContent;
 import com.pierre.mareu.ui.meeting.meeting_list.dummy.DummyContent.DummyItem;
 
@@ -27,6 +30,11 @@ import java.util.Objects;
  * interface.
  */
 public class MeetingFragment extends Fragment {
+
+    private MeetingAPIService mApiService;
+    private List<Meeting> mMeetings;;
+    private RecyclerView mRecyclerView;
+
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -43,21 +51,18 @@ public class MeetingFragment extends Fragment {
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static MeetingFragment newInstance(int columnCount) {
+    public static MeetingFragment newInstance() {
         MeetingFragment fragment = new MeetingFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
+
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mApiService = DI.getMeetingApiService();
+        mMeetings = mApiService.getMeetings();
 
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override
@@ -69,12 +74,10 @@ public class MeetingFragment extends Fragment {
         if (view instanceof RecyclerView) {
             Context context = view.getContext();
             RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
+
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new MyMeetingRecyclerViewAdapter(DummyContent.ITEMS, mListener));
+
+            recyclerView.setAdapter(new MyMeetingRecyclerViewAdapter(mMeetings, mListener));
         }
         return view;
     }
@@ -109,6 +112,6 @@ public class MeetingFragment extends Fragment {
      */
     public interface OnListFragmentInteractionListener {
         // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+        void onListFragmentInteraction(Meeting meeting);
     }
 }

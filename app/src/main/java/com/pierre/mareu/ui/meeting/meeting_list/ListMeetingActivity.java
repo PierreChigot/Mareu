@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 import com.pierre.mareu.R;
+import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.ui.meeting.meeting_list.dummy.DummyContent;
 
 
@@ -21,7 +22,7 @@ public class ListMeetingActivity extends AppCompatActivity implements MeetingFra
         setContentView(R.layout.activity_meeting_list);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        MeetingFragment.newInstance(1);
+        MeetingFragment.newInstance();
 
 
     }
@@ -36,7 +37,7 @@ public class ListMeetingActivity extends AppCompatActivity implements MeetingFra
     }
 
     @Override
-    public void onListFragmentInteraction(DummyContent.DummyItem item) {
+    public void onListFragmentInteraction(Meeting meeting) {
 
     }
 }
