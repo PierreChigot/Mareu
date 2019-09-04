@@ -25,13 +25,19 @@ public class Meeting {
 
     private String subject;
 
+    /** Meeting room*/
 
-    public Meeting(Integer id, String name, Date date, List participants, String subject) {
+    private String meetingRoom;
+
+
+    public Meeting(Integer id, String name, Date date, List participants, String subject, String meetingRoom) {
         this.id = id;
         this.name = name;
         this.date = date;
         this.participants = participants;
         this.subject = subject;
+        this.meetingRoom = meetingRoom;
+
 
 
     }
@@ -74,5 +80,13 @@ public class Meeting {
 
     public void setSubject(String subject) {
         this.subject = subject;
+    }
+
+    public String getMeetingRoom() {
+        return meetingRoom;
+    }
+
+    public void setMeetingRoom(String meetingRoom) {
+        this.meetingRoom = meetingRoom;
     }
 }

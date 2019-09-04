@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,14 +15,13 @@ import com.pierre.mareu.R;
 import com.pierre.mareu.di.DI;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.service.MeetingAPIService;
-import com.pierre.mareu.ui.meeting.meeting_list.dummy.DummyContent;
-import com.pierre.mareu.ui.meeting.meeting_list.dummy.DummyContent.DummyItem;
+
 
 import java.util.List;
 import java.util.Objects;
 
 /**
- * A fragment representing a list of Items.
+ * A fragment representing a list of Meeting.
  * <p/>
  * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
  * interface.
@@ -32,14 +29,9 @@ import java.util.Objects;
 public class MeetingFragment extends Fragment {
 
     private MeetingAPIService mApiService;
-    private List<Meeting> mMeetings;;
-    private RecyclerView mRecyclerView;
+    private List<Meeting> mMeetings;
 
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
     /**
