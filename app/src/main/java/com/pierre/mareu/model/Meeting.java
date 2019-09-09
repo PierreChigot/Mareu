@@ -1,6 +1,7 @@
 package com.pierre.mareu.model;
 
-import java.util.Date;
+import org.threeten.bp.LocalDateTime;
+
 import java.util.List;
 
 /**
@@ -15,27 +16,23 @@ public class Meeting {
     private String name;
 
     /** Date */
-    private Date date;
+    private LocalDateTime date;
 
     /** List participants */
 
-    private List<String> participants;
+    private String participants;
 
-    /** Subject */
-
-    private String subject;
 
     /** Meeting room*/
 
     private String meetingRoom;
 
 
-    public Meeting(Integer id, String name, Date date, List participants, String subject, String meetingRoom) {
+    public Meeting(Integer id, String name, LocalDateTime dateTime, String participants, String meetingRoom) {
         this.id = id;
         this.name = name;
-        this.date = date;
+        this.date = dateTime;
         this.participants = participants;
-        this.subject = subject;
         this.meetingRoom = meetingRoom;
 
 
@@ -58,29 +55,22 @@ public class Meeting {
         this.name = name;
     }
 
-    public Date getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDate(LocalDateTime dateTime) {
+        this.date = dateTime;
     }
 
-    public List<String> getParticipants() {
+    public String getParticipants() {
         return participants;
     }
 
-    public void setParticipants(List<String> participants) {
+    public void setParticipants(String participants) {
         this.participants = participants;
     }
 
-    public String getSubject() {
-        return subject;
-    }
-
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
 
     public String getMeetingRoom() {
         return meetingRoom;

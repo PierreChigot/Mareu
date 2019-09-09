@@ -1,5 +1,6 @@
 package com.pierre.mareu.ui.meeting.meeting_list;
 
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -26,6 +27,7 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
     public MyMeetingRecyclerViewAdapter(List<Meeting> meetings, OnListFragmentInteractionListener listener) {
         mMeetings = meetings;
         mListener = listener;
+
     }
 
     @Override
@@ -43,14 +45,10 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
         SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
         String date = dateFormat.format(calendar.getTime());
 
-        StringBuilder builder = new StringBuilder();
-        for (String participant: meeting.getParticipants()) {
-            builder.append(participant);
-            builder.append(", ");
-        }
+
 
         holder.mMeetingTextView.setText(meeting.getName() + " - " + date + " - " + meeting.getMeetingRoom());
-        holder.mParticipantsTextView.setText(builder.toString());
+        holder.mParticipantsTextView.setText(meeting.getParticipants());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override

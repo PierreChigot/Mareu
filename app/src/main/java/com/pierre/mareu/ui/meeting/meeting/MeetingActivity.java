@@ -9,13 +9,14 @@ import android.widget.CalendarView;
 
 import com.pierre.mareu.R;
 
+import org.threeten.bp.LocalDate;
+
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static com.pierre.mareu.service.DummyMeetingGenerator.date;
+
 
 public class MeetingActivity extends AppCompatActivity {
     private CalendarView mCalendarView;
@@ -31,13 +32,10 @@ public class MeetingActivity extends AppCompatActivity {
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
-                Calendar calendar = Calendar.getInstance();
-                calendar.set(year,month,day);
-
-                long date = calendar.getTimeInMillis();
-
+                LocalDate date = LocalDate.of(year, month + 1, day);
+                String dateString = date.toString();
                 Intent intent = new Intent(MeetingActivity.this, MeetingDetailsActivity.class);
-                intent.putExtra("date", date);
+                intent.putExtra("date", dateString);
                 startActivity(intent);
 
             }
