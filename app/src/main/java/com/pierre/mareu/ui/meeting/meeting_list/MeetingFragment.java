@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,7 +19,6 @@ import com.pierre.mareu.service.MeetingAPIService;
 
 
 import java.util.List;
-import java.util.Objects;
 
 /**
  * A fragment representing a list of Meeting.
@@ -30,7 +30,7 @@ public class MeetingFragment extends Fragment {
 
     private MeetingAPIService mApiService;
     private List<Meeting> mMeetings;
-
+    private MutableLiveData<List<Meeting>>mMeetingsLiveData;
 
     private OnListFragmentInteractionListener mListener;
 
@@ -54,6 +54,7 @@ public class MeetingFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mApiService = DI.getMeetingApiService();
         mMeetings = mApiService.getMeetings();
+   //     mMeetingsLiveData = mApiService.getMeetingsLiveData();
 
     }
 
@@ -69,7 +70,7 @@ public class MeetingFragment extends Fragment {
 
                 recyclerView.setLayoutManager(new LinearLayoutManager(context));
 
-            recyclerView.setAdapter(new MyMeetingRecyclerViewAdapter(mMeetings, mListener));
+            recyclerView.setAdapter(new ListMeetingAdapter());
         }
         return view;
     }

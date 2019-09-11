@@ -1,6 +1,9 @@
 package com.pierre.mareu.ui.meeting.meeting_list;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -10,6 +13,7 @@ import android.widget.TextView;
 
 import com.pierre.mareu.R;
 import com.pierre.mareu.model.Meeting;
+import com.pierre.mareu.ui.meeting.MeetingUIModel;
 import com.pierre.mareu.ui.meeting.meeting_list.MeetingFragment.OnListFragmentInteractionListener;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,14 +23,12 @@ import java.util.List;
  * {@link RecyclerView.Adapter} that can display a {@link Meeting} and makes a call to the
  * specified {@link OnListFragmentInteractionListener}.
  */
-public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeetingRecyclerViewAdapter.ViewHolder> {
+public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingAdapter.ViewHolder> {
 
-    private final List<Meeting> mMeetings;
-    private final OnListFragmentInteractionListener mListener;
+    //private MutableLiveData<List<Meeting>> mMeetingsLiveData = new MutableLiveData<>();
 
-    public MyMeetingRecyclerViewAdapter(List<Meeting> meetings, OnListFragmentInteractionListener listener) {
-        mMeetings = meetings;
-        mListener = listener;
+    ListMeetingAdapter() {
+       super(new DiffCallback());
 
     }
 
@@ -39,40 +41,16 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        assert mMeetings != null;
-        Meeting meeting = mMeetings.get(position);
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
-        String date = dateFormat.format(calendar.getTime());
-
-
-
-        holder.mMeetingTextView.setText(meeting.getName() + " - " + date + " - " + meeting.getMeetingRoom());
-        holder.mParticipantsTextView.setText(meeting.getParticipants());
-
-        holder.mView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (null != mListener) {
-                    // Notify the active callbacks interface (the activity, if the
-                    // fragment is attached to one) that an item has been selected.
-                    mListener.onListFragmentInteraction(holder.mMeeting);
-                }
-            }
-        });
+        holder.bind(getItem(position));
     }
 
-    @Override
-    public int getItemCount() {
-        return mMeetings.size();
-    }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private final View mView;
         private final TextView mMeetingTextView;
         private final TextView mParticipantsTextView;
 
-        private Meeting mMeeting;
 
         public ViewHolder(View view) {
             super(view);
@@ -80,10 +58,29 @@ public class MyMeetingRecyclerViewAdapter extends RecyclerView.Adapter<MyMeeting
             mMeetingTextView = view.findViewById(R.id.meeting_name_meeting_list);
             mParticipantsTextView = view.findViewById(R.id.participants_email_meeting_list);
         }
+        void bind (MeetingUIModel model){
+
+
+
+            mMeetingTextView.setText(model.getName());
+            mParticipantsTextView.setText(model.getParticipants());
+        }
 
         @Override
         public String toString() {
             return super.toString() + " '" + mMeetingTextView.getText() + "'";
+        }
+    }
+    private static class DiffCallback extends DiffUtil.ItemCallback<MeetingUIModel> {
+
+        @Override
+        public boolean areItemsTheSame(@NonNull MeetingUIModel oldItem, @NonNull MeetingUIModel newItem) {
+            return oldItem.getId() == newItem.getId();
+        }
+
+        @Override
+        public boolean areContentsTheSame(@NonNull MeetingUIModel oldItem, @NonNull MeetingUIModel newItem) {
+            return oldItem.equals(newItem);
         }
     }
 }

@@ -103,4 +103,9 @@ abstract class DummyMeetingGenerator {
     static List<Meeting> generateMeetings() {
         return new ArrayList<>(DUMMY_MEETINGS);
     }
+    static Meeting generateMeeting(){
+        return new Meeting(id, meetingName.get(new Random().nextInt(meetingName.size())),
+                dateMeeting, participants.get(new Random().nextInt(participants.size())) ,
+                meetingRooms.get(new Random().nextInt(meetingRooms.size())));
+    }
 }

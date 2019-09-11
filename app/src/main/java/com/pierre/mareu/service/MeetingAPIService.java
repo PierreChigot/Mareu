@@ -1,5 +1,8 @@
 package com.pierre.mareu.service;
 
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+
 import com.pierre.mareu.model.Meeting;
 
 import java.util.List;
@@ -13,6 +16,9 @@ public interface MeetingAPIService {
      * @return {@link List}
      */
     List<Meeting> getMeetings();
+
+    void addMeeting(Meeting meeting);
+    //MutableLiveData<List<Meeting>> getMeetingsLiveData();
 
     /**
      * Deletes a meeting

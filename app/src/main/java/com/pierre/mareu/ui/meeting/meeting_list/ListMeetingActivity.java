@@ -8,27 +8,41 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pierre.mareu.R;
 import com.pierre.mareu.model.Meeting;
+import com.pierre.mareu.ui.meeting.MeetingUIModel;
 import com.pierre.mareu.ui.meeting.meeting.MeetingActivity;
+
+import org.threeten.bp.LocalDateTime;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 public class ListMeetingActivity extends AppCompatActivity implements MeetingFragment.OnListFragmentInteractionListener {
 
     private FloatingActionButton mAddMeetingFloatingActionButton;
+    private ListMeetingViewModel mViewModel;
+    private ListMeetingAdapter mRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_list);
+        final ListMeetingAdapter adapter = new ListMeetingAdapter();
+        RecyclerView recyclerView = findViewById(R.id.list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(adapter);
         mAddMeetingFloatingActionButton = findViewById(R.id.add_meeting_floatingActionButton);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        MeetingFragment.newInstance();
 
         mAddMeetingFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,6 +51,31 @@ public class ListMeetingActivity extends AppCompatActivity implements MeetingFra
                 startActivity(rankingActivityIntent);
             }
         });
+
+        //Get the ViewModel
+        mViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(ListMeetingViewModel.class);
+
+        // Create the observer which updates the UI.
+        mViewModel.getUiModelsLiveData().observe(this, new Observer<List<MeetingUIModel>>() {
+            @Override
+            public void onChanged(List<MeetingUIModel> meetingUIModels) {
+                adapter.submitList(meetingUIModels);
+            }
+        });
+
+
+
+
+        mAddMeetingFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mViewModel.addMeeting();
+
+                //mRecyclerViewAdapter.setMeetings(essais_meetings);
+
+            }
+        });
+
 
     }
 
