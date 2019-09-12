@@ -28,7 +28,6 @@ public class ListMeetingViewModel extends ViewModel {
 
 
     private MeetingAPIService mMeetingAPIService;
-    //private MutableLiveData<List<Meeting>> mMeetingsLiveData;
     private MutableLiveData<List<MeetingUIModel>> mUiModelsLiveData = new MutableLiveData<>();
 
     public ListMeetingViewModel (MeetingAPIService meetingAPIService){
@@ -42,19 +41,11 @@ public class ListMeetingViewModel extends ViewModel {
     }
     void addMeeting() {
 
-
-
         LocalDateTime dateEssais = LocalDateTime.of(2019,01,01,00,00);
         Meeting meetingEssais = new Meeting(4, "Essai",dateEssais,"essai@essai.fr", "salle d'essai");
 
         mMeetingAPIService.addMeeting(meetingEssais);
         refresh();
-        //List<MeetingUIModel> essais_meetings = Arrays.asList(
-          //      new MeetingUIModel(4, "Essai",dateEssais,"essai@essai.fr", "salle d'essai"));
-
-        //mUiModelsLiveData.setValue(essais_meetings);
-
-
     }
 
     private void refresh() {

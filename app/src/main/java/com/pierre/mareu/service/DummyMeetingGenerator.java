@@ -85,18 +85,17 @@ abstract class DummyMeetingGenerator {
         return id;
     }
     public static final List<Meeting> DUMMY_MEETINGS = Arrays.asList(
-            new Meeting(id, meetingName.get(new Random().nextInt(meetingName.size())),
-                    dateMeeting, participants.get(new Random().nextInt(participants.size())) ,
-                    meetingRooms.get(new Random().nextInt(meetingRooms.size()))),
-            new Meeting(id, meetingName.get(new Random().nextInt(meetingName.size())),
-                    dateMeeting, participants.get(new Random().nextInt(participants.size())) ,
-                    meetingRooms.get(new Random().nextInt(meetingRooms.size()))),
-            new Meeting(id, meetingName.get(new Random().nextInt(meetingName.size())),
-                    dateMeeting, participants.get(new Random().nextInt(participants.size())) ,
-                    meetingRooms.get(new Random().nextInt(meetingRooms.size()))),
-            new Meeting(id, meetingName.get(new Random().nextInt(meetingName.size())),
-                    dateMeeting, participants.get(new Random().nextInt(participants.size())) + " "+ participants.get(new Random().nextInt(participants.size())),
-                    meetingRooms.get(new Random().nextInt(meetingRooms.size())))
+            new Meeting(0, "Réunion A", dateMeeting, "toto@smiley.fr",
+                    "Salle 2"),
+            new Meeting(2, "Réunion B", dateMeeting, "dark.vador@starwars.gl",
+                    "Salle 3"),
+            new Meeting(3, "Réunion C", dateMeeting, "zaphod@beltegeuse.com",
+                    "Salle 4"),
+            new Meeting(4, "Réunion D", dateMeeting, "sarah.connor@nofate.us",
+                    "Salle 5"),
+            new Meeting(5, "Réunion E", dateMeeting,"vincent.team@wallet.biz" ,
+                    "Salle 6")
+
 
     );
 

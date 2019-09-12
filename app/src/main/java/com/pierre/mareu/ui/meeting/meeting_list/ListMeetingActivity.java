@@ -18,18 +18,13 @@ import com.pierre.mareu.R;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.ui.meeting.MeetingUIModel;
 import com.pierre.mareu.ui.meeting.meeting.MeetingActivity;
-
-import org.threeten.bp.LocalDateTime;
-
-import java.util.Arrays;
 import java.util.List;
 
 
-public class ListMeetingActivity extends AppCompatActivity implements MeetingFragment.OnListFragmentInteractionListener {
+public class ListMeetingActivity extends AppCompatActivity {
 
     private FloatingActionButton mAddMeetingFloatingActionButton;
     private ListMeetingViewModel mViewModel;
-    private ListMeetingAdapter mRecyclerViewAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,15 +58,10 @@ public class ListMeetingActivity extends AppCompatActivity implements MeetingFra
             }
         });
 
-
-
-
         mAddMeetingFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mViewModel.addMeeting();
-
-                //mRecyclerViewAdapter.setMeetings(essais_meetings);
 
             }
         });
@@ -88,8 +78,5 @@ public class ListMeetingActivity extends AppCompatActivity implements MeetingFra
         return true;
     }
 
-    @Override
-    public void onListFragmentInteraction(Meeting meeting) {
 
-    }
 }

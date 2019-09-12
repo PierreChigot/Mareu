@@ -12,20 +12,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pierre.mareu.R;
-import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.ui.meeting.MeetingUIModel;
-import com.pierre.mareu.ui.meeting.meeting_list.MeetingFragment.OnListFragmentInteractionListener;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.List;
 
-/**
- * {@link RecyclerView.Adapter} that can display a {@link Meeting} and makes a call to the
- * specified {@link OnListFragmentInteractionListener}.
- */
+
 public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingAdapter.ViewHolder> {
 
-    //private MutableLiveData<List<Meeting>> mMeetingsLiveData = new MutableLiveData<>();
 
     ListMeetingAdapter() {
        super(new DiffCallback());
@@ -44,26 +35,27 @@ public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingA
         holder.bind(getItem(position));
     }
 
-
-
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private final View mView;
+
         private final TextView mMeetingTextView;
         private final TextView mParticipantsTextView;
-
+        private final TextView mTimeTextView;
+        private final TextView mRoomTextView;
 
         public ViewHolder(View view) {
             super(view);
-            mView = view;
+
             mMeetingTextView = view.findViewById(R.id.meeting_name_meeting_list);
             mParticipantsTextView = view.findViewById(R.id.participants_email_meeting_list);
+            mTimeTextView = view.findViewById(R.id.time_textView);
+            mRoomTextView = view.findViewById(R.id.room_textView);
         }
         void bind (MeetingUIModel model){
 
-
-
             mMeetingTextView.setText(model.getName());
             mParticipantsTextView.setText(model.getParticipants());
+            mTimeTextView.setText(model.getDate());
+            mRoomTextView.setText(model.getMeetingRoom());
         }
 
         @Override
