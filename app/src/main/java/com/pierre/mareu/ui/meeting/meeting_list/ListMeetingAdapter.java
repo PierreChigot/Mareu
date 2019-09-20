@@ -1,7 +1,7 @@
 package com.pierre.mareu.ui.meeting.meeting_list;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
+
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;

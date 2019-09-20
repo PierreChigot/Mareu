@@ -7,11 +7,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:name=".MainApplication"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_launcher_lamzone"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.meeting.meeting.MeetingDetailsActivity"></activity>
-        <activity android:name=".ui.meeting.meeting.MeetingActivity" />
+        <activity android:name=".ui.meeting.meeting.MeetingDetailsActivity"
+
+            ></activity>
         <activity android:name=".ui.meeting.meeting_list.ListMeetingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

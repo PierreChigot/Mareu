@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="participants_arrays">
+        <item>Salle 1</item>
+        <item>Salle 2</item>
+        <item>Salle 3</item>
+        <item>Salle 4</item>
+        <item>Salle 5</item>
+        <item>Salle 6</item>
+        <item>Salle 7</item>
+        <item>Salle 8</item>
+        <item>Salle 9</item>
+        <item>Salle 10</item>
+        <item>toto@smiley.fr</item>
+        <item>toto2@smiley.fr</item>
+        <item>dark.vador@starwars.gl</item>
+        <item>zaphod@beltegeuse.com</item>
+        <item>sarah.connor@nofate.us</item>
+        <item>claudi@dikenek.be</item>
+        <item>alain.terieur@carambar.fr</item>
+        <item>alex.terieur@carambar.fr</item>
+        <item>vincent.team@wallet.biz</item>
+    </string-array>
+</resources>

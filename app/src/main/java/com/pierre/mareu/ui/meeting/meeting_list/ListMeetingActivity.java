@@ -15,15 +15,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pierre.mareu.R;
-import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.ui.meeting.MeetingUIModel;
-import com.pierre.mareu.ui.meeting.meeting.MeetingActivity;
+import com.pierre.mareu.ui.meeting.meeting.MeetingDetailsActivity;
+
 import java.util.List;
 
 
 public class ListMeetingActivity extends AppCompatActivity {
 
     private FloatingActionButton mAddMeetingFloatingActionButton;
+    private FloatingActionButton mAddDummyMeetingFloatingActionButton;
     private ListMeetingViewModel mViewModel;
 
     @Override
@@ -35,6 +36,7 @@ public class ListMeetingActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         mAddMeetingFloatingActionButton = findViewById(R.id.add_meeting_floatingActionButton);
+        mAddDummyMeetingFloatingActionButton = findViewById(R.id.add_randomMeeting_floatingActionButton);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -42,7 +44,7 @@ public class ListMeetingActivity extends AppCompatActivity {
         mAddMeetingFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent rankingActivityIntent = new Intent(ListMeetingActivity.this, MeetingActivity.class);
+                Intent rankingActivityIntent = new Intent(ListMeetingActivity.this, MeetingDetailsActivity.class);
                 startActivity(rankingActivityIntent);
             }
         });
@@ -58,7 +60,7 @@ public class ListMeetingActivity extends AppCompatActivity {
             }
         });
 
-        mAddMeetingFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+       mAddDummyMeetingFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mViewModel.addMeeting();
@@ -68,8 +70,6 @@ public class ListMeetingActivity extends AppCompatActivity {
 
 
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

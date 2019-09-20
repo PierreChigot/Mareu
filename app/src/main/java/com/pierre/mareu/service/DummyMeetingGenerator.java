@@ -87,7 +87,7 @@ abstract class DummyMeetingGenerator {
     public static final List<Meeting> DUMMY_MEETINGS = Arrays.asList(
             new Meeting(0, "Réunion A", dateMeeting, "toto@smiley.fr",
                     "Salle 2"),
-            new Meeting(2, "Réunion B", dateMeeting, "dark.vador@starwars.gl",
+            new Meeting(2, "Réunion B", dateMeeting, "zaphod@beltegeuse.com" + "dark.vador@starwars.gl" + "toto@smiley.fr",
                     "Salle 3"),
             new Meeting(3, "Réunion C", dateMeeting, "zaphod@beltegeuse.com",
                     "Salle 4"),
