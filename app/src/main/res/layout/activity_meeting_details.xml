@@ -152,22 +152,19 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
-        android:layout_marginEnd="8dp"
-        android:minWidth="32dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView4"
-        app:layout_constraintTop_toBottomOf="@+id/spinner"
         android:hint="@string/participant"
-        >
+        android:minWidth="32dp"
+        app:layout_constraintEnd_toStartOf="@+id/addParticipant_button"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
+        app:layout_constraintTop_toBottomOf="@+id/spinner">
 
         <AutoCompleteTextView
             android:id="@+id/participant_autoCompleteTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:dropDownHeight="200dp"
             android:dropDownAnchor="@+id/meetingName_editText"
-            android:maxLines="1"
-           />
+            android:dropDownHeight="200dp"
+            android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -195,6 +192,22 @@
 
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
+
+    <Button
+        android:id="@+id/addParticipant_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/roundcorner_button"
+        android:paddingStart="8dp"
+        android:paddingTop="0dp"
+        android:paddingEnd="8dp"
+        android:paddingBottom="0dp"
+        android:text="@string/add_participant"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@android:color/background_light"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/textInputLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,20 +1,19 @@
 package com.pierre.mareu.ui.meeting.meeting;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -42,6 +41,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
     private Chip mparticipantChip;
     private AutoCompleteTextView mparticipantsAutoCompleteTextView;
     private ChipGroup mparticipantsChipGroup;
+    private Button maddParticipantButton;
     private LocalTime mbeginTime;
     private LocalTime mendTime;
 
@@ -63,6 +63,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mmeetingRoomsSpinner = findViewById(R.id.spinner);
         mparticipantsAutoCompleteTextView = findViewById(R.id.participant_autoCompleteTextView);
         mparticipantsChipGroup = findViewById(R.id.chipGroup);
+        maddParticipantButton = findViewById(R.id.addParticipant_button);
 
 
         mdateEditTextView.setShowSoftInputOnFocus(false);
@@ -137,6 +138,33 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         ArrayAdapter<CharSequence> adapterParticipants = ArrayAdapter.createFromResource(this,
                 R.array.participants_arrays, android.R.layout.simple_dropdown_item_1line);
         mparticipantsAutoCompleteTextView.setAdapter(adapterParticipants);
+        maddParticipantButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mparticipantsAutoCompleteTextView.getText() != null){
+                    String participant;
+                    participant = mparticipantsAutoCompleteTextView.getText().toString();
+                    Chip chip = new Chip(mparticipantsChipGroup.getContext());
+                    chip.setTextAppearance(mparticipantsChipGroup.getContext(),R.);
+                    chip.setText(participant);
+                    chip.setChipIcon(getDrawable(R.drawable.ic_person_pin_black_18dp)) ;
+                    chip.setCloseIcon(getDrawable(R.drawable.ic_close_black_18dp));
+                    chip.setCheckable(false);
+                    chip.setClickable(true);
+                    mparticipantsChipGroup.addView(chip);
+                    /*chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            mparticipantsChipGroup.removeView(chip);
+                        }
+                    });
+*/
+
+                }
+
+
+            }
+        });
 
 
 

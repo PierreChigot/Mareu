@@ -11,4 +11,5 @@
     <string name="participants">Participants :</string>
     <string name="meeting_room">Salle de réunion :</string>
     <string name="participant">Participant</string>
+    <string name="add_participant">Ajouter</string>
 </resources>
