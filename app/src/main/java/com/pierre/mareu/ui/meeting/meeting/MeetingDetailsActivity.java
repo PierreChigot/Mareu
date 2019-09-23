@@ -1,7 +1,6 @@
 package com.pierre.mareu.ui.meeting.meeting;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -9,6 +8,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -79,6 +79,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE dd MMMM yyyy", Locale.FRANCE);
                         String dateFormatted = date.format(formatter);
                         mdateEditTextView.setText(dateFormatted);
+                        mdateEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
                     }
                 }, mYear, mMonth, mDay);
                 datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
@@ -96,6 +97,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.FRANCE);
                         String timeFormatted = mbeginTime.format(formatter);
                         mbeginTimeEditTextView.setText(timeFormatted);
+                        mbeginTimeEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
                     }
                 }, mbeginHour, mbeginMinutes, true);
                 timePickerDialog.show();
@@ -142,25 +144,31 @@ public class MeetingDetailsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (mparticipantsAutoCompleteTextView.getText() != null){
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(mparticipantsAutoCompleteTextView.getWindowToken(), 0);
+
                     String participant;
                     participant = mparticipantsAutoCompleteTextView.getText().toString();
-                    Chip chip = new Chip(mparticipantsChipGroup.getContext());
-                    chip.setTextAppearance(mparticipantsChipGroup.getContext(),R.);
+                    final Chip chip = new Chip(mparticipantsChipGroup.getContext());
+
                     chip.setText(participant);
                     chip.setChipIcon(getDrawable(R.drawable.ic_person_pin_black_18dp)) ;
-                    chip.setCloseIcon(getDrawable(R.drawable.ic_close_black_18dp));
                     chip.setCheckable(false);
                     chip.setClickable(true);
+                    chip.setCloseIconVisible(true);
+
+
                     mparticipantsChipGroup.addView(chip);
-                    /*chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                    chip.setOnCloseIconClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
                             mparticipantsChipGroup.removeView(chip);
                         }
                     });
-*/
 
                 }
+                mparticipantsAutoCompleteTextView.setText("");
+
 
 
             }
