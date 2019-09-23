@@ -1,14 +1,18 @@
 package com.pierre.mareu.ui.meeting.meeting;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -18,42 +22,44 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pierre.mareu.R;
-
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import static android.app.PendingIntent.getActivity;
 
 public class MeetingDetailsActivity extends AppCompatActivity {
+    private FloatingActionButton mcloseMeetingDetailFloatingActionButton;
+    private Button msaveMeetingButton;
     private TextView mDateTextView;
     private EditText mmeetingNameEditText;
     private TextView mdateEditTextView;
     private TextView mbeginTimeEditTextView;
     private TextView mendTimeEditTextView;
     private Spinner mmeetingRoomsSpinner;
-    private Chip mparticipantChip;
     private AutoCompleteTextView mparticipantsAutoCompleteTextView;
     private ChipGroup mparticipantsChipGroup;
     private Button maddParticipantButton;
     private LocalTime mbeginTime;
     private LocalTime mendTime;
 
-
-
     private int mYear, mMonth, mDay, mbeginHour, mbeginMinutes, mendHour, mendMinutes;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_details);
+        mcloseMeetingDetailFloatingActionButton = findViewById(R.id.close_meetingDetail_floatingActionButton);
+        msaveMeetingButton = findViewById(R.id.saveMetting_button);
         mDateTextView = findViewById(R.id.date_textView);
         mmeetingNameEditText = findViewById(R.id.meetingName_editText);
         mmeetingNameEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -65,9 +71,23 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mparticipantsChipGroup = findViewById(R.id.chipGroup);
         maddParticipantButton = findViewById(R.id.addParticipant_button);
 
-
         mdateEditTextView.setShowSoftInputOnFocus(false);
         mbeginTimeEditTextView.setShowSoftInputOnFocus(false);
+
+        mcloseMeetingDetailFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        msaveMeetingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
 
         mdateEditTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,30 +133,67 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.FRANCE);
                         String timeFormatted = mendTime.format(formatter);
                         mendTimeEditTextView.setText(timeFormatted);
-                        if (mendTime.isBefore(mbeginTime)) {
-                            Toast.makeText(MeetingDetailsActivity.this, "L'heure de fin de la réunion doit être après l'heure de début"
-                                    , Toast.LENGTH_LONG).show();
-                            mendTimeEditTextView.setTextColor(getResources().getColor(R.color.errorColor));
-                        } else {
-                            mendTimeEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
-                        }
+                        mendTimeEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
                     }
                 }, mendHour, mendMinutes, true);
                 timePickerDialog.show();
-
-
             }
         });
+        if (mbeginTime != null&& mendTime != null){
+            if (mendTime.isBefore(mbeginTime)) {
+                Toast.makeText(MeetingDetailsActivity.this, "L'heure de fin de la réunion doit être après l'heure de début"
+                        , Toast.LENGTH_LONG).show();
+                mendTimeEditTextView.setTextColor(getResources().getColor(R.color.errorColor));
+            } else {
+                mendTimeEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
+            }
+        }
         //Spinner to choose meeting room :
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.meeting_rooms_arrays, android.R.layout.simple_spinner_item);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        mmeetingRoomsSpinner.setAdapter(adapter);
+        ArrayList<String> meetingRooms = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.meeting_rooms_arrays)));
+        meetingRooms.add(0, getString(R.string.choose_meetingRoom));
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.spinner_item,meetingRooms){
+            @Override
+            public boolean isEnabled(int position) {
+                // Disable the first item from Spinner
+                // First item will be use for hint
+                return position != 0;
+            }
 
+            @Override
+            public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if(position == 0){
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                    tv.setTextSize(12);
+                }
+                else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
 
-        //AutocompleteTextView + chips to choose the participants :
+        };
+       mmeetingRoomsSpinner.setAdapter(adapter);
+       mmeetingRoomsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+           @Override
+           public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+               String selectedMeetingRoom = (String) adapterView.getItemAtPosition(position);
+
+               if(position > 0){
+                   TextView tv = (TextView) view;
+                   tv.setTextColor(Color.BLACK);
+               }
+           }
+
+           @Override
+           public void onNothingSelected(AdapterView<?> adapterView) {
+
+           }
+       });
+
+        //AutocompleteTextView + chips to add the participants :
         ArrayAdapter<CharSequence> adapterParticipants = ArrayAdapter.createFromResource(this,
                 R.array.participants_arrays, android.R.layout.simple_dropdown_item_1line);
         mparticipantsAutoCompleteTextView.setAdapter(adapterParticipants);
@@ -149,37 +206,33 @@ public class MeetingDetailsActivity extends AppCompatActivity {
 
                     String participant;
                     participant = mparticipantsAutoCompleteTextView.getText().toString();
-                    final Chip chip = new Chip(mparticipantsChipGroup.getContext());
+                    // ensure it's an e-mail
+                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(participant).matches()||participant.isEmpty()){
+                        Toast.makeText(MeetingDetailsActivity.this, R.string.its_not_an_email_message
+                                , Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        final Chip chip = new Chip(mparticipantsChipGroup.getContext());
+                        chip.setText(participant);
+                        chip.setChipIcon(getDrawable(R.drawable.ic_person_pin_black_18dp)) ;
+                        chip.setCheckable(false);
+                        chip.setClickable(true);
+                        chip.setCloseIconVisible(true);
 
-                    chip.setText(participant);
-                    chip.setChipIcon(getDrawable(R.drawable.ic_person_pin_black_18dp)) ;
-                    chip.setCheckable(false);
-                    chip.setClickable(true);
-                    chip.setCloseIconVisible(true);
 
-
-                    mparticipantsChipGroup.addView(chip);
-                    chip.setOnCloseIconClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            mparticipantsChipGroup.removeView(chip);
-                        }
-                    });
+                        mparticipantsChipGroup.addView(chip);
+                        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mparticipantsChipGroup.removeView(chip);
+                            }
+                        });
+                    }
 
                 }
                 mparticipantsAutoCompleteTextView.setText("");
-
-
-
             }
         });
 
-
-
-
-
-
     }
-
-
 }
