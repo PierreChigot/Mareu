@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.pierre.mareu.di.DI;
 import com.pierre.mareu.service.DummyMeetingAPIService;
 import com.pierre.mareu.service.MeetingAPIService;
+import com.pierre.mareu.ui.meeting.meeting.MeetingDetailsViewModel;
 
 /**
  * Created by Pierre Chigot
@@ -37,6 +38,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
         if (modelClass.isAssignableFrom(ListMeetingViewModel.class)){
             return (T) new ListMeetingViewModel(mMeetingAPIService);
+        }
+        else if (modelClass.isAssignableFrom(MeetingDetailsViewModel.class)){
+            return (T) new MeetingDetailsViewModel(mMeetingAPIService);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

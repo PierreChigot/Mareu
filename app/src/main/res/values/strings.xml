@@ -17,4 +17,5 @@
     <string name="participants_error_message">Entrez l\'e-mail d\'un participant</string>
     <string name="choose_meetingRoom">Veuillez choisir une salle</string>
     <string name="its_not_an_email_message">Veuillez entrer un e-mail valide</string>
+    <string name="field_isEmpty">Veuillez renseigner tout les champs</string>
 </resources>

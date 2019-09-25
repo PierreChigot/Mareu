@@ -3,6 +3,10 @@ package com.pierre.mareu.ui.meeting.meeting;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -22,19 +26,27 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pierre.mareu.R;
+import com.pierre.mareu.di.DI;
+import com.pierre.mareu.model.Meeting;
+import com.pierre.mareu.service.MeetingAPIService;
+import com.pierre.mareu.ui.meeting.meeting_list.ListMeetingActivity;
+import com.pierre.mareu.ui.meeting.meeting_list.ListMeetingViewModel;
+import com.pierre.mareu.ui.meeting.meeting_list.ViewModelFactory;
+
 import org.threeten.bp.LocalDate;
+import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
 import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class MeetingDetailsActivity extends AppCompatActivity {
@@ -49,14 +61,26 @@ public class MeetingDetailsActivity extends AppCompatActivity {
     private AutoCompleteTextView mparticipantsAutoCompleteTextView;
     private ChipGroup mparticipantsChipGroup;
     private Button maddParticipantButton;
+    private String mmeetingName;
+    private String mmeetingRoom;
+    private String mparticipants;
+    private String mdateFormatted = "";
+    private String mendTimeFormatted = "";
+    private String mbeginTimeFormatted = "";
+    private LocalDate mdate;
     private LocalTime mbeginTime;
+    protected LocalDateTime mdateTime;
     private LocalTime mendTime;
 
+    private Meeting mMeeting;
     private int mYear, mMonth, mDay, mbeginHour, mbeginMinutes, mendHour, mendMinutes;
+
+    private MeetingDetailsViewModel mMeetingDetailsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_meeting_details);
         mcloseMeetingDetailFloatingActionButton = findViewById(R.id.close_meetingDetail_floatingActionButton);
         msaveMeetingButton = findViewById(R.id.saveMetting_button);
@@ -80,25 +104,41 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        //Get the ViewModel
+        mMeetingDetailsViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingDetailsViewModel.class);
+        mMeetingDetailsViewModel.getViewActionMutableLiveData().observe(this, new Observer<ViewAction>() {
+            @Override
+            public void onChanged(ViewAction viewAction) {
+                switch (viewAction) {
+                    case OK:
+                        finish();
+                        break;
+                    case DISPLAY_ERROR:
+                        //TODO toast
+                        break;
+
+                }
+            }
+        });
 
         msaveMeetingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                newMeeting();
+
 
             }
         });
-
-
         mdateEditTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 DatePickerDialog datePickerDialog = new DatePickerDialog(MeetingDetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
-                        LocalDate date = LocalDate.of(year, month + 1, day);
+                        mdate = LocalDate.of(year, month + 1, day);
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE dd MMMM yyyy", Locale.FRANCE);
-                        String dateFormatted = date.format(formatter);
-                        mdateEditTextView.setText(dateFormatted);
+                        mdateFormatted = mdate.format(formatter);
+                        mdateEditTextView.setText(mdateFormatted);
                         mdateEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
                     }
                 }, mYear, mMonth, mDay);
@@ -115,8 +155,8 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker timePicker, int hour, int minutes) {
                         mbeginTime = LocalTime.of(hour, minutes);
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.FRANCE);
-                        String timeFormatted = mbeginTime.format(formatter);
-                        mbeginTimeEditTextView.setText(timeFormatted);
+                        mbeginTimeFormatted = mbeginTime.format(formatter);
+                        mbeginTimeEditTextView.setText(mbeginTimeFormatted);
                         mbeginTimeEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
                     }
                 }, mbeginHour, mbeginMinutes, true);
@@ -131,15 +171,15 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                     public void onTimeSet(TimePicker timePicker, int hour, int minutes) {
                         mendTime = LocalTime.of(hour, minutes);
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.FRANCE);
-                        String timeFormatted = mendTime.format(formatter);
-                        mendTimeEditTextView.setText(timeFormatted);
+                        mendTimeFormatted = mendTime.format(formatter);
+                        mendTimeEditTextView.setText(mendTimeFormatted);
                         mendTimeEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
                     }
                 }, mendHour, mendMinutes, true);
                 timePickerDialog.show();
             }
         });
-        if (mbeginTime != null&& mendTime != null){
+        if (mbeginTime != null && mendTime != null) {
             if (mendTime.isBefore(mbeginTime)) {
                 Toast.makeText(MeetingDetailsActivity.this, "L'heure de fin de la réunion doit être après l'heure de début"
                         , Toast.LENGTH_LONG).show();
@@ -151,7 +191,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         //Spinner to choose meeting room :
         ArrayList<String> meetingRooms = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.meeting_rooms_arrays)));
         meetingRooms.add(0, getString(R.string.choose_meetingRoom));
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.spinner_item,meetingRooms){
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_item, meetingRooms) {
             @Override
             public boolean isEnabled(int position) {
                 // Disable the first item from Spinner
@@ -163,35 +203,34 @@ public class MeetingDetailsActivity extends AppCompatActivity {
             public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
-                if(position == 0){
+                if (position == 0) {
                     // Set the hint text color gray
                     tv.setTextColor(Color.GRAY);
                     tv.setTextSize(12);
-                }
-                else {
+                } else {
                     tv.setTextColor(Color.BLACK);
                 }
                 return view;
             }
 
         };
-       mmeetingRoomsSpinner.setAdapter(adapter);
-       mmeetingRoomsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-           @Override
-           public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-               String selectedMeetingRoom = (String) adapterView.getItemAtPosition(position);
+        mmeetingRoomsSpinner.setAdapter(adapter);
+        mmeetingRoomsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                String selectedMeetingRoom = (String) adapterView.getItemAtPosition(position);
 
-               if(position > 0){
-                   TextView tv = (TextView) view;
-                   tv.setTextColor(Color.BLACK);
-               }
-           }
+                if (position > 0) {
+                    TextView tv = (TextView) view;
+                    tv.setTextColor(Color.BLACK);
+                }
+            }
 
-           @Override
-           public void onNothingSelected(AdapterView<?> adapterView) {
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-           }
-       });
+            }
+        });
 
         //AutocompleteTextView + chips to add the participants :
         ArrayAdapter<CharSequence> adapterParticipants = ArrayAdapter.createFromResource(this,
@@ -200,21 +239,20 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         maddParticipantButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mparticipantsAutoCompleteTextView.getText() != null){
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (mparticipantsAutoCompleteTextView.getText() != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(mparticipantsAutoCompleteTextView.getWindowToken(), 0);
 
                     String participant;
                     participant = mparticipantsAutoCompleteTextView.getText().toString();
                     // ensure it's an e-mail
-                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(participant).matches()||participant.isEmpty()){
+                    if (!android.util.Patterns.EMAIL_ADDRESS.matcher(participant).matches() || participant.isEmpty()) {
                         Toast.makeText(MeetingDetailsActivity.this, R.string.its_not_an_email_message
                                 , Toast.LENGTH_SHORT).show();
-                    }
-                    else {
+                    } else {
                         final Chip chip = new Chip(mparticipantsChipGroup.getContext());
                         chip.setText(participant);
-                        chip.setChipIcon(getDrawable(R.drawable.ic_person_pin_black_18dp)) ;
+                        chip.setChipIcon(getDrawable(R.drawable.ic_person_pin_black_18dp));
                         chip.setCheckable(false);
                         chip.setClickable(true);
                         chip.setCloseIconVisible(true);
@@ -233,6 +271,33 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                 mparticipantsAutoCompleteTextView.setText("");
             }
         });
+
+
+    }
+
+    private void newMeeting() {
+        //we recover all the values when we click on the save button and
+        //The name of the meeting
+        String meetingName = mmeetingNameEditText.getText().toString();
+
+        //The date and time
+        LocalDateTime dateTime = LocalDateTime.of(mdate, mbeginTime);
+
+        //The name of the meeting room
+        String meetingRoom = mmeetingRoomsSpinner.getSelectedItem().toString();
+
+        //The list of participants
+        List<String> participants = new ArrayList<String>();
+
+
+        for (int j = 0; j < mparticipantsChipGroup.getChildCount(); j++) {
+            Chip chip = (Chip) mparticipantsChipGroup.getChildAt(j);
+            participants.add(chip.getText().toString());
+        }
+        mMeetingDetailsViewModel.addMeeting(meetingName, meetingRoom, dateTime, participants);
+
+        // we ensure that all the fields are not empty
+
 
     }
 }

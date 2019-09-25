@@ -39,7 +39,7 @@ public class ListMeetingViewModel extends ViewModel {
 
         return mUiModelsLiveData;
     }
-    void addMeeting() {
+    public void addMeeting(Meeting meeting) {
 
         LocalDateTime dateEssais = LocalDateTime.of(2019,01,01,00,00);
         Meeting meetingEssais = new Meeting(4, "Essai",dateEssais,"essai@essai.fr", "salle d'essai");
@@ -48,7 +48,7 @@ public class ListMeetingViewModel extends ViewModel {
         refresh();
     }
 
-    private void refresh() {
+    public void refresh() {
         List<Meeting> updatedMeetings = mMeetingAPIService.getMeetings();
         List<MeetingUIModel> uiModels = new ArrayList<>();
 

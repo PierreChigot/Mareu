@@ -60,15 +60,21 @@ public class ListMeetingActivity extends AppCompatActivity {
             }
         });
 
-       mAddDummyMeetingFloatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mViewModel.addMeeting();
+//       mAddDummyMeetingFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                mViewModel.addMeeting();
+//
+//            }
+//        });
 
-            }
-        });
 
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mViewModel.refresh();
     }
 
     @Override
