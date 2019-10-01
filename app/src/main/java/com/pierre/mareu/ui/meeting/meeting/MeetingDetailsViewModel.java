@@ -7,6 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.pierre.mareu.R;
+import com.pierre.mareu.Utils.IdUtils;
+import com.pierre.mareu.Utils.MeetingRoomUtils;
 import com.pierre.mareu.Utils.SingleLiveEvent;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.service.MeetingAPIService;
@@ -32,22 +34,37 @@ public class MeetingDetailsViewModel extends ViewModel {
     }
 
 
-    public void addMeeting(String meetingName, String meetingRoom, LocalDateTime dateTime, List<String> participants) {
-        if (meetingName.isEmpty() || meetingRoom.isEmpty() || participants.isEmpty() ){
-           //TODO
+    public void addMeeting(String meetingName,
+                           String meetingRoom,
+                           LocalDateTime dateTimeBegin,
+                           LocalDateTime dateTimeEnd,
+                           List<String> participants) {
+        if (meetingName.isEmpty() || meetingRoom.isEmpty() || participants.isEmpty() || dateTimeBegin == null){
             mViewActionMutableLiveData.setValue(ViewAction.DISPLAY_ERROR);
-        }else {
+        }else if (MeetingRoomUtils.MeetingRoomIsAlreadyReserved(mMeetingAPIService.getMeetings(),
+                dateTimeBegin,dateTimeEnd,meetingRoom)){
+            mViewActionMutableLiveData.setValue(ViewAction.DISPLAY_ERROR_MEETING_ROOM);
+        } else {
             String listParticipants = "";
+            StringBuilder stringBuilder = new StringBuilder();
+            String prefix = "";
             for (String participant : participants) {
-                listParticipants += participant;
+                stringBuilder.append(prefix);
+                prefix = ", ";
+                stringBuilder.append(participant);
+
+
 
             }
-            Meeting meeting = new Meeting(10, meetingName, dateTime, listParticipants, meetingRoom);
+            listParticipants = stringBuilder.toString();
+            int id = IdUtils.SetId(mMeetingAPIService);
+            Meeting meeting = new Meeting(id, meetingName, dateTimeBegin, dateTimeEnd , meetingRoom, listParticipants);
+
+
 
             mMeetingAPIService.addMeeting(meeting);
             mViewActionMutableLiveData.setValue(ViewAction.OK);
         }
-
 
 
     }

@@ -15,8 +15,12 @@ public class Meeting {
     /** Name */
     private String name;
 
-    /** Date */
-    private LocalDateTime date;
+    /** Date and time of meeting's beginning*/
+    private LocalDateTime dateTimeBegin;
+
+    /** time of meeting's end */
+    private LocalDateTime dateTimeEnd;
+
 
     /** List participants */
 
@@ -28,13 +32,13 @@ public class Meeting {
     private String meetingRoom;
 
 
-    public Meeting(Integer id, String name, LocalDateTime dateTime, String participants, String meetingRoom) {
+    public Meeting(Integer id, String name, LocalDateTime dateTimeBegin, LocalDateTime dateTimeEnd, String meetingRoom, String participants) {
         this.id = id;
         this.name = name;
-        this.date = dateTime;
+        this.dateTimeBegin = dateTimeBegin;
+        this.dateTimeEnd = dateTimeEnd;
         this.participants = participants;
         this.meetingRoom = meetingRoom;
-
 
 
     }
@@ -55,12 +59,20 @@ public class Meeting {
         this.name = name;
     }
 
-    public LocalDateTime getDate() {
-        return date;
+    public LocalDateTime getDateTimeBegin() {
+        return dateTimeBegin;
     }
 
-    public void setDate(LocalDateTime dateTime) {
-        this.date = dateTime;
+    public void setDateTimeBegin(LocalDateTime dateTime) {
+        this.dateTimeBegin = dateTime;
+    }
+
+    public LocalDateTime getDateTimeEnd() {
+        return dateTimeEnd;
+    }
+
+    public void setDateTimeEnd(LocalDateTime dateTimeEnd) {
+        this.dateTimeEnd = dateTimeEnd;
     }
 
     public String getParticipants() {

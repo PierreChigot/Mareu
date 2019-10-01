@@ -5,5 +5,6 @@ package com.pierre.mareu.ui.meeting.meeting;
  */
 enum ViewAction {
     OK,
-    DISPLAY_ERROR
+    DISPLAY_ERROR,
+    DISPLAY_ERROR_MEETING_ROOM
 }

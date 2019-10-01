@@ -16,9 +16,11 @@ import com.pierre.mareu.ui.meeting.MeetingUIModel;
 
 import org.threeten.bp.LocalDateTime;
 
+import org.threeten.bp.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -39,29 +41,43 @@ public class ListMeetingViewModel extends ViewModel {
 
         return mUiModelsLiveData;
     }
-    public void addMeeting(Meeting meeting) {
+    /*public void addMeeting(Meeting meeting) {
 
         LocalDateTime dateEssais = LocalDateTime.of(2019,01,01,00,00);
         Meeting meetingEssais = new Meeting(4, "Essai",dateEssais,"essai@essai.fr", "salle d'essai");
 
         mMeetingAPIService.addMeeting(meetingEssais);
         refresh();
-    }
+    }*/
 
     public void refresh() {
         List<Meeting> updatedMeetings = mMeetingAPIService.getMeetings();
         List<MeetingUIModel> uiModels = new ArrayList<>();
 
+        String date = "";
         for (Meeting updatedMeeting : updatedMeetings) {
+            if (updatedMeeting.getDateTimeBegin() != null){
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm", Locale.FRANCE);
+                date = updatedMeeting.getDateTimeBegin().format(formatter);
+            }
 
             uiModels.add(new MeetingUIModel(
                     updatedMeeting.getId(),
                     updatedMeeting.getName(),
-                    updatedMeeting.getDate() == null? "date nul" : updatedMeeting.getDate().toString(),
+                    updatedMeeting.getDateTimeBegin() == null? "date nul" : date,
                     updatedMeeting.getParticipants(),
                     updatedMeeting.getMeetingRoom()));
         }
         mUiModelsLiveData.setValue(uiModels);
+    }
+    public void sortByPlace(){
+        //TODO sort list -->
+        //mMeetingAPIService.getMeetings().
+
+    }
+    public void sortByDate(){
+
     }
 
 

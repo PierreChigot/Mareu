@@ -281,23 +281,19 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         String meetingName = mmeetingNameEditText.getText().toString();
 
         //The date and time
-        LocalDateTime dateTime = LocalDateTime.of(mdate, mbeginTime);
+        LocalDateTime dateTimeBegin = LocalDateTime.of(mdate, mbeginTime);
+        LocalDateTime dateTimeEnd = LocalDateTime.of(mdate,mendTime);
 
         //The name of the meeting room
         String meetingRoom = mmeetingRoomsSpinner.getSelectedItem().toString();
 
         //The list of participants
         List<String> participants = new ArrayList<String>();
-
-
         for (int j = 0; j < mparticipantsChipGroup.getChildCount(); j++) {
             Chip chip = (Chip) mparticipantsChipGroup.getChildAt(j);
             participants.add(chip.getText().toString());
         }
-        mMeetingDetailsViewModel.addMeeting(meetingName, meetingRoom, dateTime, participants);
-
-        // we ensure that all the fields are not empty
-
+        mMeetingDetailsViewModel.addMeeting(meetingName, meetingRoom, dateTimeBegin, dateTimeEnd,participants );
 
     }
 }
