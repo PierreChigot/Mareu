@@ -1,12 +1,12 @@
 package com.pierre.mareu.ui.meeting.meeting;
 
-import android.widget.Toast;
+
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
+
 import androidx.lifecycle.ViewModel;
 
-import com.pierre.mareu.R;
+
 import com.pierre.mareu.Utils.IdUtils;
 import com.pierre.mareu.Utils.MeetingRoomUtils;
 import com.pierre.mareu.Utils.SingleLiveEvent;
@@ -21,7 +21,7 @@ import java.util.List;
  * Created by Pierre Chigot
  */
 public class MeetingDetailsViewModel extends ViewModel {
-    MeetingAPIService mMeetingAPIService;
+    private MeetingAPIService mMeetingAPIService;
 
     public LiveData<ViewAction> getViewActionMutableLiveData() {
         return mViewActionMutableLiveData;
@@ -33,8 +33,7 @@ public class MeetingDetailsViewModel extends ViewModel {
         mMeetingAPIService = meetingAPIService;
     }
 
-
-    public void addMeeting(String meetingName,
+    protected void addMeeting(String meetingName,
                            String meetingRoom,
                            LocalDateTime dateTimeBegin,
                            LocalDateTime dateTimeEnd,
@@ -45,22 +44,17 @@ public class MeetingDetailsViewModel extends ViewModel {
                 dateTimeBegin,dateTimeEnd,meetingRoom)){
             mViewActionMutableLiveData.setValue(ViewAction.DISPLAY_ERROR_MEETING_ROOM);
         } else {
-            String listParticipants = "";
+            String listParticipants;
             StringBuilder stringBuilder = new StringBuilder();
             String prefix = "";
             for (String participant : participants) {
                 stringBuilder.append(prefix);
                 prefix = ", ";
                 stringBuilder.append(participant);
-
-
-
             }
             listParticipants = stringBuilder.toString();
             int id = IdUtils.SetId(mMeetingAPIService);
             Meeting meeting = new Meeting(id, meetingName, dateTimeBegin, dateTimeEnd , meetingRoom, listParticipants);
-
-
 
             mMeetingAPIService.addMeeting(meeting);
             mViewActionMutableLiveData.setValue(ViewAction.OK);

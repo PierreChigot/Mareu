@@ -212,7 +212,6 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                 }
                 return view;
             }
-
         };
         mmeetingRoomsSpinner.setAdapter(adapter);
         mmeetingRoomsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -271,8 +270,6 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                 mparticipantsAutoCompleteTextView.setText("");
             }
         });
-
-
     }
 
     private void newMeeting() {
