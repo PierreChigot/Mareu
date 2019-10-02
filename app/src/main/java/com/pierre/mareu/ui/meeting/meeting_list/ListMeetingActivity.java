@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,23 +24,22 @@ import com.pierre.mareu.ui.meeting.meeting.MeetingDetailsActivity;
 import java.util.List;
 
 
-public class ListMeetingActivity extends AppCompatActivity {
+public class ListMeetingActivity extends AppCompatActivity implements ListMeetingAdapter.OnDeleteButtonListener, ListMeetingAdapter.OnItemClickedListener {
 
     private FloatingActionButton mAddMeetingFloatingActionButton;
-    private FloatingActionButton mAddDummyMeetingFloatingActionButton;
+
+
     private ListMeetingViewModel mViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_list);
-        final ListMeetingAdapter adapter = new ListMeetingAdapter();
+        final ListMeetingAdapter adapter = new ListMeetingAdapter(this, this);
         RecyclerView recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
         mAddMeetingFloatingActionButton = findViewById(R.id.add_meeting_floatingActionButton);
-        mAddDummyMeetingFloatingActionButton = findViewById(R.id.add_randomMeeting_floatingActionButton);
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -54,6 +51,7 @@ public class ListMeetingActivity extends AppCompatActivity {
             }
         });
 
+
         //Get the ViewModel
         mViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(ListMeetingViewModel.class);
 
@@ -64,8 +62,6 @@ public class ListMeetingActivity extends AppCompatActivity {
                 adapter.submitList(meetingUIModels);
             }
         });
-
-
     }
 
     @Override
@@ -88,8 +84,6 @@ public class ListMeetingActivity extends AppCompatActivity {
                     , Toast.LENGTH_LONG).show();
             mViewModel.sortByPlace();
         }
-
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -98,11 +92,15 @@ public class ListMeetingActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
 
-
-
-
         return true;
     }
+    @Override
+    public void onDeleteMeeting(int meetingId) {
+        mViewModel.deleteMeeting(meetingId);
+    }
 
+    @Override
+    public void onItemClicked(int meetingId) {
 
+    }
 }

@@ -16,7 +16,7 @@ public class MeetingSort {
         }
     };
 
-    public static Comparator<MeetingUIModel> ComparatorDate = new Comparator<MeetingUIModel>() {
+    public static final Comparator<MeetingUIModel> ComparatorDate = new Comparator<MeetingUIModel>() {
 
         @Override
         public int compare(MeetingUIModel meeting1, MeetingUIModel meeting2) {

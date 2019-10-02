@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
 import com.pierre.mareu.Utils.MeetingSort;
+import com.pierre.mareu.Utils.MeetingUtils;
 import com.pierre.mareu.di.DI;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.service.MeetingAPIService;
@@ -67,10 +68,10 @@ public class ListMeetingViewModel extends ViewModel {
                     updatedMeeting.getMeetingRoom()));
         }
         if (mSortByDate){
-            Comparator comparatorDate = MeetingSort.ComparatorDate;
+            Comparator<MeetingUIModel> comparatorDate = MeetingSort.ComparatorDate;
             Collections.sort(uiModels, comparatorDate);
         }else {
-            Comparator comparatorRoom = MeetingSort.ComparatorRoom;
+            Comparator<MeetingUIModel> comparatorRoom = MeetingSort.ComparatorRoom;
             Collections.sort(uiModels, comparatorRoom);
         }
 
@@ -87,4 +88,8 @@ public class ListMeetingViewModel extends ViewModel {
     }
 
 
+    public void deleteMeeting(int id) {
+        mMeetingAPIService.deleteMeeting(id);
+        refresh();
+    }
 }

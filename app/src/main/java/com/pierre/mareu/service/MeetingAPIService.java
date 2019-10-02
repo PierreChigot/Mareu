@@ -20,8 +20,8 @@ public interface MeetingAPIService {
 
     /**
      * Deletes a meeting
-     * @param meeting to delete
+     * @param meetingId to delete
      */
-    void deleteMeeting(Meeting meeting);
+    void deleteMeeting(int meetingId);
 }
 

@@ -1,8 +1,5 @@
 package com.pierre.mareu.service;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.pierre.mareu.model.Meeting;
 
 import java.util.List;
@@ -26,7 +23,13 @@ public class DummyMeetingAPIService implements MeetingAPIService{
 
 
     @Override
-    public void deleteMeeting(Meeting meeting) {
-        mMeetings.remove(meeting);
+    public void deleteMeeting(int meetingId) {
+        for (Meeting meeting : mMeetings) {
+            if (meeting.getId() == meetingId){
+                mMeetings.remove(meeting);
+            }
+
+        }
+
     }
 }
