@@ -4,8 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
@@ -70,8 +75,31 @@ public class ListMeetingActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int idItem = item.getItemId();
+        if (idItem == R.id.sort_date){
+            item.setChecked(true);
+            Toast.makeText(ListMeetingActivity.this, "par date"
+                    , Toast.LENGTH_LONG).show();
+            mViewModel.sortByDate();
+        }else if (idItem == R.id.sort_place) {
+            item.setChecked(true);
+            Toast.makeText(ListMeetingActivity.this, "par lieux"
+                    , Toast.LENGTH_LONG).show();
+            mViewModel.sortByPlace();
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu,menu);
+
+
+
 
         return true;
     }

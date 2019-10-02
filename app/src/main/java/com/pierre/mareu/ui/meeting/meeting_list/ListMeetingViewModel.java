@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.pierre.mareu.Utils.MeetingSort;
 import com.pierre.mareu.di.DI;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.service.MeetingAPIService;
@@ -19,6 +20,9 @@ import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,6 +35,7 @@ public class ListMeetingViewModel extends ViewModel {
 
     private MeetingAPIService mMeetingAPIService;
     private MutableLiveData<List<MeetingUIModel>> mUiModelsLiveData = new MutableLiveData<>();
+    private boolean mSortByDate = true;
 
     public ListMeetingViewModel (MeetingAPIService meetingAPIService){
        mMeetingAPIService = meetingAPIService;
@@ -41,14 +46,6 @@ public class ListMeetingViewModel extends ViewModel {
 
         return mUiModelsLiveData;
     }
-    /*public void addMeeting(Meeting meeting) {
-
-        LocalDateTime dateEssais = LocalDateTime.of(2019,01,01,00,00);
-        Meeting meetingEssais = new Meeting(4, "Essai",dateEssais,"essai@essai.fr", "salle d'essai");
-
-        mMeetingAPIService.addMeeting(meetingEssais);
-        refresh();
-    }*/
 
     public void refresh() {
         List<Meeting> updatedMeetings = mMeetingAPIService.getMeetings();
@@ -69,15 +66,24 @@ public class ListMeetingViewModel extends ViewModel {
                     updatedMeeting.getParticipants(),
                     updatedMeeting.getMeetingRoom()));
         }
+        if (mSortByDate){
+            Comparator comparatorDate = MeetingSort.ComparatorDate;
+            Collections.sort(uiModels, comparatorDate);
+        }else {
+            Comparator comparatorRoom = MeetingSort.ComparatorRoom;
+            Collections.sort(uiModels, comparatorRoom);
+        }
+
         mUiModelsLiveData.setValue(uiModels);
     }
     public void sortByPlace(){
-        //TODO sort list -->
-        //mMeetingAPIService.getMeetings().
-
+        mSortByDate = false;
+        refresh();
     }
     public void sortByDate(){
 
+        mSortByDate = true;
+        refresh();
     }
 
 

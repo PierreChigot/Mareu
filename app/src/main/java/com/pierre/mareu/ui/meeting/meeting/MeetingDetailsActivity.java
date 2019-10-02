@@ -114,9 +114,13 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                         finish();
                         break;
                     case DISPLAY_ERROR:
-                        //TODO toast
+                        Toast.makeText(MeetingDetailsActivity.this, getString(R.string.error_message)
+                                , Toast.LENGTH_LONG).show();
                         break;
-
+                    case DISPLAY_ERROR_MEETING_ROOM:
+                        Toast.makeText(MeetingDetailsActivity.this, getString(R.string.error_message_meeting_room)
+                                , Toast.LENGTH_LONG).show();
+                        break;
                 }
             }
         });
