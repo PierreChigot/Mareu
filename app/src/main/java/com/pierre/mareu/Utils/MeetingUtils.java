@@ -8,7 +8,7 @@ import com.pierre.mareu.model.Meeting;
 import java.util.List;
 
 public class MeetingUtils {
-        @Nullable
+       /* @Nullable
         public static Meeting getMeetingFromId(@NonNull List<Meeting> meetings, int id){
             for (Meeting meeting : meetings) {
                 if (meeting.getId() == id){
@@ -17,6 +17,6 @@ public class MeetingUtils {
             }
             return null;
 
-        }
+        }*/
 
 }

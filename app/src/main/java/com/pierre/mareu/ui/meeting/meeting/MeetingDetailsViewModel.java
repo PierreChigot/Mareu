@@ -1,11 +1,8 @@
 package com.pierre.mareu.ui.meeting.meeting;
 
-
-
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-
 import androidx.lifecycle.ViewModel;
-
 
 import com.pierre.mareu.Utils.IdUtils;
 import com.pierre.mareu.Utils.MeetingRoomUtils;
@@ -14,9 +11,13 @@ import com.pierre.mareu.Utils.SingleLiveEvent;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.service.MeetingAPIService;
 
+import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
+import org.threeten.bp.LocalTime;
+import org.threeten.bp.format.DateTimeFormatter;
 
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Pierre Chigot
@@ -24,7 +25,7 @@ import java.util.List;
 public class MeetingDetailsViewModel extends ViewModel {
     private MeetingAPIService mMeetingAPIService;
 
-    public LiveData<ViewAction> getViewActionMutableLiveData() {
+    LiveData<ViewAction> getViewActionMutableLiveData() {
         return mViewActionMutableLiveData;
     }
 
@@ -33,13 +34,12 @@ public class MeetingDetailsViewModel extends ViewModel {
     public MeetingDetailsViewModel(MeetingAPIService meetingAPIService) {
         mMeetingAPIService = meetingAPIService;
     }
-
-    protected void saveMeeting(String meetingName,
-                               String meetingRoom,
-                               LocalDateTime dateTimeBegin,
-                               LocalDateTime dateTimeEnd,
-                               List<String> participants,
-                               int meetingId) {
+    void saveMeeting(String meetingName,
+                     String meetingRoom,
+                     LocalDateTime dateTimeBegin,
+                     LocalDateTime dateTimeEnd,
+                     List<String> participants,
+                     int meetingId) {
         Meeting meeting;
         if (meetingName.isEmpty() || meetingRoom.isEmpty() || participants.isEmpty() || dateTimeBegin == null){
             mViewActionMutableLiveData.setValue(ViewAction.DISPLAY_ERROR);
@@ -61,29 +61,31 @@ public class MeetingDetailsViewModel extends ViewModel {
             if (meetingId == -1){
                 meeting = new Meeting(id, meetingName, dateTimeBegin, dateTimeEnd , meetingRoom, listParticipants);
             }else {
-                //we remove the meeting and replace with the edited meeting
-                //TODO
-                MeetingUtils.getMeetingFromId(mMeetingAPIService.getMeetings(),meetingId);
 
+                mMeetingAPIService.deleteMeeting(meetingId);
                 meeting = new Meeting(meetingId,meetingName, dateTimeBegin, dateTimeEnd , meetingRoom, listParticipants);
-
             }
-
-
-
-
-
-
             mMeetingAPIService.addMeeting(meeting);
             mViewActionMutableLiveData.setValue(ViewAction.OK);
         }
-
-
+    }
+    String formatDate(LocalDate date){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE dd MMMM yyyy", Locale.FRANCE);
+        return date.format(formatter);
     }
 
-    public Meeting editMeeting(int meetingId) {
-
-        return MeetingUtils.getMeetingFromId(mMeetingAPIService.getMeetings(),meetingId);
-
+    String formatTime(LocalTime time) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm", Locale.FRANCE);
+        return time.format(formatter);
     }
+    Meeting getMeetingFromId(int id){
+        List<Meeting> meetings = mMeetingAPIService.getMeetings();
+        for (Meeting meeting : meetings) {
+            if (meeting.getId() == id){
+                return meeting;
+            }
+        }
+        return null;
+    }
+
 }
