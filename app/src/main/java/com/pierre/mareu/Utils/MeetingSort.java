@@ -6,7 +6,7 @@ import com.pierre.mareu.ui.meeting.MeetingUIModel;
 import java.util.Comparator;
 
 public class MeetingSort {
-    public static Comparator<MeetingUIModel> ComparatorRoom = new Comparator<MeetingUIModel>() {
+    public static final Comparator<MeetingUIModel> COMPARATOR_ROOM = new Comparator<MeetingUIModel>() {
 
         @Override
         public int compare(MeetingUIModel meeting1, MeetingUIModel meeting2) {
@@ -16,7 +16,7 @@ public class MeetingSort {
         }
     };
 
-    public static final Comparator<MeetingUIModel> ComparatorDate = new Comparator<MeetingUIModel>() {
+    public static final Comparator<MeetingUIModel> COMPARATOR_DATE = new Comparator<MeetingUIModel>() {
 
         @Override
         public int compare(MeetingUIModel meeting1, MeetingUIModel meeting2) {

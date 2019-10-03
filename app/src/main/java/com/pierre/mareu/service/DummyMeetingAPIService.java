@@ -2,6 +2,7 @@ package com.pierre.mareu.service;
 
 import com.pierre.mareu.model.Meeting;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -24,11 +25,17 @@ public class DummyMeetingAPIService implements MeetingAPIService{
 
     @Override
     public void deleteMeeting(int meetingId) {
-        for (Meeting meeting : mMeetings) {
+       /* for (Meeting meeting : mMeetings) {
             if (meeting.getId() == meetingId){
                 mMeetings.remove(meeting);
             }
 
+        }*/
+        for (Iterator<Meeting> iterator = mMeetings.iterator(); iterator.hasNext(); ) {
+            Meeting meeting = iterator.next();
+            if (meeting.getId() == meetingId) {
+                iterator.remove();
+            }
         }
 
     }

@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.pierre.mareu.Utils.IdUtils;
 import com.pierre.mareu.Utils.MeetingRoomUtils;
+import com.pierre.mareu.Utils.MeetingUtils;
 import com.pierre.mareu.Utils.SingleLiveEvent;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.service.MeetingAPIService;
@@ -33,14 +34,16 @@ public class MeetingDetailsViewModel extends ViewModel {
         mMeetingAPIService = meetingAPIService;
     }
 
-    protected void addMeeting(String meetingName,
-                           String meetingRoom,
-                           LocalDateTime dateTimeBegin,
-                           LocalDateTime dateTimeEnd,
-                           List<String> participants) {
+    protected void saveMeeting(String meetingName,
+                               String meetingRoom,
+                               LocalDateTime dateTimeBegin,
+                               LocalDateTime dateTimeEnd,
+                               List<String> participants,
+                               int meetingId) {
+        Meeting meeting;
         if (meetingName.isEmpty() || meetingRoom.isEmpty() || participants.isEmpty() || dateTimeBegin == null){
             mViewActionMutableLiveData.setValue(ViewAction.DISPLAY_ERROR);
-        }else if (MeetingRoomUtils.MeetingRoomIsAlreadyReserved(mMeetingAPIService.getMeetings(),
+        }else if ((meetingId == -1) && MeetingRoomUtils.MeetingRoomIsAlreadyReserved(mMeetingAPIService.getMeetings(),
                 dateTimeBegin,dateTimeEnd,meetingRoom)){
             mViewActionMutableLiveData.setValue(ViewAction.DISPLAY_ERROR_MEETING_ROOM);
         } else {
@@ -54,12 +57,33 @@ public class MeetingDetailsViewModel extends ViewModel {
             }
             listParticipants = stringBuilder.toString();
             int id = IdUtils.SetId(mMeetingAPIService);
-            Meeting meeting = new Meeting(id, meetingName, dateTimeBegin, dateTimeEnd , meetingRoom, listParticipants);
+
+            if (meetingId == -1){
+                meeting = new Meeting(id, meetingName, dateTimeBegin, dateTimeEnd , meetingRoom, listParticipants);
+            }else {
+                //we remove the meeting and replace with the edited meeting
+                //TODO
+                MeetingUtils.getMeetingFromId(mMeetingAPIService.getMeetings(),meetingId);
+
+                meeting = new Meeting(meetingId,meetingName, dateTimeBegin, dateTimeEnd , meetingRoom, listParticipants);
+
+            }
+
+
+
+
+
 
             mMeetingAPIService.addMeeting(meeting);
             mViewActionMutableLiveData.setValue(ViewAction.OK);
         }
 
+
+    }
+
+    public Meeting editMeeting(int meetingId) {
+
+        return MeetingUtils.getMeetingFromId(mMeetingAPIService.getMeetings(),meetingId);
 
     }
 }

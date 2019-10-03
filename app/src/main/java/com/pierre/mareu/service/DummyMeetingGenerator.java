@@ -27,7 +27,7 @@ abstract class DummyMeetingGenerator {
             new Meeting(0, "Réunion A", dateTimeMeeting0, dateTimeEndMeeting0,
                     "Salle 2", "toto@smiley.fr"),
             new Meeting(1, "Réunion B", dateTimeMeeting1, dateTimeEndMeeting1,
-                    "Salle 3", "zaphod@beltegeuse.com" + "dark.vador@starwars.gl" + "toto@smiley.fr"),
+                    "Salle 3", "zaphod@beltegeuse.com, dark.vador@starwars.gl, toto@smiley.fr"),
             new Meeting(2, "Réunion C", dateTimeMeeting2, dateTimeEndMeeting2,
                     "Salle 4", "zaphod@beltegeuse.com"),
             new Meeting(3, "Réunion D", dateTimeMeeting3, dateTimeEndMeeting3,
