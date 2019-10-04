@@ -1,6 +1,6 @@
 package com.pierre.mareu.Utils;
 
-import com.pierre.mareu.model.Meeting;
+
 import com.pierre.mareu.ui.meeting.MeetingUIModel;
 
 import java.util.Comparator;

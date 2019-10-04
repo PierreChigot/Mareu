@@ -26,8 +26,6 @@ import java.util.List;
 
 public class ListMeetingActivity extends AppCompatActivity implements ListMeetingAdapter.OnDeleteButtonListener, ListMeetingAdapter.OnItemClickedListener {
 
-    private FloatingActionButton mAddMeetingFloatingActionButton;
-
 
     private ListMeetingViewModel mViewModel;
 
@@ -39,7 +37,7 @@ public class ListMeetingActivity extends AppCompatActivity implements ListMeetin
         RecyclerView recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
-        mAddMeetingFloatingActionButton = findViewById(R.id.add_meeting_floatingActionButton);
+        FloatingActionButton mAddMeetingFloatingActionButton = findViewById(R.id.add_meeting_floatingActionButton);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 

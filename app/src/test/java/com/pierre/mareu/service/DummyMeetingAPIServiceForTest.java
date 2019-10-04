@@ -5,11 +5,9 @@ import com.pierre.mareu.model.Meeting;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by Pierre Chigot
- */
-public class DummyMeetingAPIService implements MeetingAPIService{
-    private final List<Meeting> mMeetings = DummyMeetingGenerator.generateMeetings();
+public class DummyMeetingAPIServiceForTest implements MeetingAPIService {
+
+    private final List<Meeting> mMeetings = DummyMeetingGeneratorForTest.generateMeetings();
 
     @Override
     public List<Meeting> getMeetings() {

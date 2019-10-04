@@ -2,7 +2,6 @@ package com.pierre.mareu.ui.meeting;
 
 import androidx.annotation.Nullable;
 
-import org.threeten.bp.LocalDateTime;
 
 /**
  * Created by Pierre Chigot

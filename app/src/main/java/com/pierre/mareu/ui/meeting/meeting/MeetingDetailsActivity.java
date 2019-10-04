@@ -40,6 +40,7 @@ import org.threeten.bp.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 public class MeetingDetailsActivity extends AppCompatActivity {
     private EditText mMeetingNameEditText;
@@ -54,7 +55,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
     private LocalTime mBeginTime;
     private LocalTime mEndTime;
     int mId;
-    private int mYear, mMonth, mDay, mbeginHour, mbeginMinutes, mendHour, mendMinutes;
+    private int mYear = -1, mMonth = -1, mDay = -1, mBeginHour = 0, mBeginMinutes = 0, mEndHour = 0, mEndMinutes = 0;
     private MeetingDetailsViewModel mMeetingDetailsViewModel;
 
     @Override
@@ -81,7 +82,6 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
-        //Get the ViewModel
         mMeetingDetailsViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MeetingDetailsViewModel.class);
         mMeetingDetailsViewModel.getViewActionMutableLiveData().observe(this, new Observer<ViewAction>() {
             @Override
@@ -98,6 +98,10 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                         Toast.makeText(MeetingDetailsActivity.this, getString(R.string.error_message_meeting_room)
                                 , Toast.LENGTH_LONG).show();
                         break;
+                    case DISPLAY_ERROR_TIME:
+                        Toast.makeText(MeetingDetailsActivity.this, getString(R.string.error_message_time)
+                                , Toast.LENGTH_LONG).show();
+                        break;
                 }
             }
         });
@@ -110,25 +114,21 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mDateEditTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Locale.setDefault(Locale.FRANCE);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(MeetingDetailsActivity.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int year, int month, int day) {
                         mDate = LocalDate.of(year, month + 1, day);
+                        mYear = year;
+                        mMonth = month;
+                        mDay = day;
                         mDateFormatted = mMeetingDetailsViewModel.formatDate(mDate);
                         mDateEditTextView.setText(mDateFormatted);
                         mDateEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
                     }
                 }, mYear, mMonth, mDay);
-                if (mDateEditTextView.getText().equals("")) {
-                    Toast.makeText(MeetingDetailsActivity.this, "lmdateEditTextView.getText()" + mDateEditTextView.getText()
-                            , Toast.LENGTH_LONG).show();
-
+                if (mYear == -1 || mMonth == -1 || mDay == -1) {
                     datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
-                } else {
-                    Toast.makeText(MeetingDetailsActivity.this, "lmdateEditTextView.getText()" + mDateEditTextView.getText()
-                            , Toast.LENGTH_LONG).show();
-                    //TODO set the date of the date picker at the date of the textview
-
                 }
                 datePickerDialog.show();
             }
@@ -140,10 +140,12 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minutes) {
                         mBeginTime = LocalTime.of(hour, minutes);
+                        mBeginHour = hour;
+                        mBeginMinutes = minutes;
                         mBeginTimeEditTextView.setText(mMeetingDetailsViewModel.formatTime(mBeginTime));
                         mBeginTimeEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
                     }
-                }, mbeginHour, mbeginMinutes, true);
+                }, mBeginHour, mBeginMinutes, true);
                 timePickerDialog.show();
             }
         });
@@ -154,33 +156,22 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onTimeSet(TimePicker timePicker, int hour, int minutes) {
                         mEndTime = LocalTime.of(hour, minutes);
+                        mEndHour = hour;
+                        mEndMinutes = minutes;
                         mEndTimeEditTextView.setText(mMeetingDetailsViewModel.formatTime(mEndTime));
                         mEndTimeEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
                     }
-                }, mendHour, mendMinutes, true);
+                }, mEndHour, mEndMinutes, true);
                 timePickerDialog.show();
             }
         });
-        if (mBeginTime != null && mEndTime != null) {
-            if (mEndTime.isBefore(mBeginTime)) {
-                Toast.makeText(MeetingDetailsActivity.this, "L'heure de fin de la réunion doit être après l'heure de début"
-                        , Toast.LENGTH_LONG).show();
-                mEndTimeEditTextView.setTextColor(getResources().getColor(R.color.errorColor));
-            } else {
-                mEndTimeEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
-            }
-        }
         //Spinner to choose meeting room :
         ArrayList<String> meetingRooms = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.meeting_rooms_arrays)));
         meetingRooms.add(0, getString(R.string.choose_meetingRoom));
-        // Disable the first item from Spinner
-        // First item will be use for hint
-        // Set the hint text color gray
         ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, meetingRooms) {
             @Override
             public boolean isEnabled(int position) {
-                // Disable the first item from Spinner
-                // First item will be use for hint
+                // Disable the first item from Spinner, first item will be use for hint
                 return position != 0;
             }
             @Override
@@ -188,8 +179,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
                 if (position == 0) {
-                    // Set the hint text color gray
-                    tv.setTextColor(Color.GRAY);
+                    tv.setTextColor(Color.GRAY);// Set the hint text color gray
                     tv.setTextSize(12);
                 } else {
                     tv.setTextColor(Color.BLACK);
@@ -245,30 +235,26 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         //if we are on the case where we edit a meeting :
         mId = getIntent().getIntExtra("ID", -1);
         if (mId != -1) {
-            Toast.makeText(MeetingDetailsActivity.this, "l'id est  : " + mId
-                    , Toast.LENGTH_LONG).show();
             Meeting meeting = mMeetingDetailsViewModel.getMeetingFromId(mId);
             String mMeetingName = meeting.getName();
             LocalDateTime mMeetingBeginLocalDateTime = meeting.getDateTimeBegin();
             LocalDateTime mMeetingEndLocalDateTime = meeting.getDateTimeEnd();
             String mParticipants = meeting.getParticipants();
-
             mMeetingNameEditText.setText(mMeetingName);
             int position = spinnerAdapter.getPosition(meeting.getMeetingRoom());
             mMeetingRoomsSpinner.setSelection(position);
-
+            mYear = mMeetingBeginLocalDateTime.getYear();
+            mMonth = mMeetingBeginLocalDateTime.getMonth().getValue() - 1;
+            mDay = mMeetingBeginLocalDateTime.getDayOfMonth();
             mDate = mMeetingBeginLocalDateTime.toLocalDate();
             mDateEditTextView.setText(mMeetingDetailsViewModel.formatDate(mDate));
             mDateEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
-
             mBeginTime = mMeetingBeginLocalDateTime.toLocalTime();
             mBeginTimeEditTextView.setText(mBeginTime.toString());
             mBeginTimeEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
-
             mEndTime = mMeetingEndLocalDateTime.toLocalTime();
             mEndTimeEditTextView.setText(mEndTime.toString());
             mEndTimeEditTextView.setTextColor(getResources().getColor(R.color.colorBlack));
-
             String[] parts = mParticipants.split(", ");
             for (String part : parts) {
                 final Chip chip = addChip(part);
@@ -279,24 +265,21 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                         mParticipantsChipGroup.removeView(chip);
                     }
                 });
-
             }
         }
     }
     private void saveMeeting() {
-
-        //we recover all the values when we click on the save button and
-        //The name of the meeting
+        //we recover all the values when we click on the save button
         String meetingName = mMeetingNameEditText.getText().toString();
-
-        //The date and time
-        LocalDateTime dateTimeBegin = LocalDateTime.of(mDate, mBeginTime);
-        LocalDateTime dateTimeEnd = LocalDateTime.of(mDate, mEndTime);
-
-        //The name of the meeting room
+        LocalDateTime dateTimeBegin = null;
+        LocalDateTime dateTimeEnd = null;
+        if (mDate !=null && mBeginTime != null && mEndTime != null){
+            dateTimeBegin = LocalDateTime.of(mDate, mBeginTime);
+            dateTimeEnd = LocalDateTime.of(mDate, mEndTime);
+        }else {
+            Toast.makeText(MeetingDetailsActivity.this, getString(R.string.error_message_date_and_time), Toast.LENGTH_LONG).show();
+        }
         String meetingRoom = mMeetingRoomsSpinner.getSelectedItem().toString();
-
-        //The list of participants
         List<String> participants = new ArrayList<>();
         for (int j = 0; j < mParticipantsChipGroup.getChildCount(); j++) {
             Chip chip = (Chip) mParticipantsChipGroup.getChildAt(j);

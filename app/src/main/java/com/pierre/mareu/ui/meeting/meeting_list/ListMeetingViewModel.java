@@ -20,14 +20,14 @@ import java.util.Locale;
 /**
  * Created by Pierre Chigot
  */
-public class ListMeetingViewModel extends ViewModel {
+class ListMeetingViewModel extends ViewModel {
 
 
     private MeetingAPIService mMeetingAPIService;
     private MutableLiveData<List<MeetingUIModel>> mUiModelsLiveData = new MutableLiveData<>();
     private boolean mSortByDate = true;
 
-    public ListMeetingViewModel (MeetingAPIService meetingAPIService){
+    ListMeetingViewModel(MeetingAPIService meetingAPIService){
        mMeetingAPIService = meetingAPIService;
        refresh();
     }
@@ -37,7 +37,7 @@ public class ListMeetingViewModel extends ViewModel {
         return mUiModelsLiveData;
     }
 
-    public void refresh() {
+    void refresh() {
         List<Meeting> updatedMeetings = mMeetingAPIService.getMeetings();
         List<MeetingUIModel> uiModels = new ArrayList<>();
 
@@ -66,18 +66,15 @@ public class ListMeetingViewModel extends ViewModel {
 
         mUiModelsLiveData.setValue(uiModels);
     }
-    public void sortByPlace(){
+    void sortByPlace(){
         mSortByDate = false;
         refresh();
     }
-    public void sortByDate(){
-
+    void sortByDate(){
         mSortByDate = true;
         refresh();
     }
-
-
-    public void deleteMeeting(int id) {
+    void deleteMeeting(int id) {
         mMeetingAPIService.deleteMeeting(id);
         refresh();
     }

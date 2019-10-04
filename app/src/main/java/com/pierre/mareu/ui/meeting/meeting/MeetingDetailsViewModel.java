@@ -1,12 +1,10 @@
 package com.pierre.mareu.ui.meeting.meeting;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.pierre.mareu.Utils.IdUtils;
 import com.pierre.mareu.Utils.MeetingRoomUtils;
-import com.pierre.mareu.Utils.MeetingUtils;
 import com.pierre.mareu.Utils.SingleLiveEvent;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.service.MeetingAPIService;
@@ -41,12 +39,15 @@ public class MeetingDetailsViewModel extends ViewModel {
                      List<String> participants,
                      int meetingId) {
         Meeting meeting;
-        if (meetingName.isEmpty() || meetingRoom.isEmpty() || participants.isEmpty() || dateTimeBegin == null){
+        if (meetingName.isEmpty() || meetingRoom.isEmpty() || participants.isEmpty() || dateTimeBegin == null || dateTimeEnd == null){
             mViewActionMutableLiveData.setValue(ViewAction.DISPLAY_ERROR);
         }else if ((meetingId == -1) && MeetingRoomUtils.MeetingRoomIsAlreadyReserved(mMeetingAPIService.getMeetings(),
                 dateTimeBegin,dateTimeEnd,meetingRoom)){
             mViewActionMutableLiveData.setValue(ViewAction.DISPLAY_ERROR_MEETING_ROOM);
-        } else {
+        } else if (dateTimeBegin.isAfter(dateTimeEnd)){
+            mViewActionMutableLiveData.setValue(ViewAction.DISPLAY_ERROR_TIME);
+        }
+        else {
             String listParticipants;
             StringBuilder stringBuilder = new StringBuilder();
             String prefix = "";

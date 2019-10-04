@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.pierre.mareu.di.DI;
-import com.pierre.mareu.service.DummyMeetingAPIService;
 import com.pierre.mareu.service.MeetingAPIService;
 import com.pierre.mareu.ui.meeting.meeting.MeetingDetailsViewModel;
 
@@ -18,7 +17,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
     private final MeetingAPIService mMeetingAPIService;
 
-    public ViewModelFactory(MeetingAPIService meetingAPIService) {
+    private ViewModelFactory(MeetingAPIService meetingAPIService) {
         this.mMeetingAPIService = meetingAPIService;
     }
     public static ViewModelFactory getInstance() {
