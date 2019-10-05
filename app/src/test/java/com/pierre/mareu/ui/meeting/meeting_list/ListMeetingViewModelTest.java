@@ -29,7 +29,7 @@ public class ListMeetingViewModelTest {
 
     @Mock Observer<List<MeetingUIModel>> observer;
 
-    private MeetingAPIService service = DI.getMeetingApiService();
+    //private MeetingAPIService service = DI.getMeetingApiService();
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
@@ -42,12 +42,14 @@ public class ListMeetingViewModelTest {
 
     @Test
     public void getUiModelsLiveData() {
+        MeetingAPIService service = DI.getNewInstanceApiService();
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
         assertEquals(2, Objects.requireNonNull(viewModel.getUiModelsLiveData().getValue()).get(0).getId());
     }
 
     @Test
     public void refresh() {
+        MeetingAPIService service = DI.getNewInstanceApiService();
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
 
         viewModel.getUiModelsLiveData().observeForever(observer);
@@ -63,7 +65,7 @@ public class ListMeetingViewModelTest {
 
     @Test
     public void sortByPlace() {
-
+        MeetingAPIService service = DI.getNewInstanceApiService();
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
         viewModel.sortByPlace();
         assertEquals("Salle 2", Objects.requireNonNull(viewModel.getUiModelsLiveData().getValue()).get(0).getMeetingRoom());
@@ -72,12 +74,14 @@ public class ListMeetingViewModelTest {
 
     @Test
     public void sortByDate() {
+        MeetingAPIService service = DI.getNewInstanceApiService();
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
         assertEquals("24/10 09:00", Objects.requireNonNull(viewModel.getUiModelsLiveData().getValue()).get(0).getDate());
     }
 
     @Test
     public void deleteMeeting() {
+        MeetingAPIService service = DI.getNewInstanceApiService();
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
         Meeting meetingToDelete = service.getMeetings().get(0);
         MeetingUIModel meetingUIModel = Objects.requireNonNull(viewModel.getUiModelsLiveData().getValue()).get(0);
