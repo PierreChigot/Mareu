@@ -12,16 +12,16 @@ import java.util.List;
  * Created by Pierre Chigot
  */
 abstract class DummyMeetingGenerator {
-    private static LocalDateTime dateTimeMeeting0 = LocalDateTime.of(2019,10,25,10,00);
-    private static LocalDateTime dateTimeEndMeeting0 = LocalDateTime.of(2019,10,25,10,45);
-    private static LocalDateTime dateTimeMeeting1 = LocalDateTime.of(2019,10,26,18,00);
-    private static LocalDateTime dateTimeEndMeeting1 = LocalDateTime.of(2019,10,26,19,00);
-    private static LocalDateTime dateTimeMeeting2 = LocalDateTime.of(2019,10,24,9,00);
-    private static LocalDateTime dateTimeEndMeeting2 = LocalDateTime.of(2019,10,24,9,30);
-    private static LocalDateTime dateTimeMeeting3 = LocalDateTime.of(2019,10,28,15,00);
-    private static LocalDateTime dateTimeEndMeeting3 = LocalDateTime.of(2019,10,28,15,45);
-    private static LocalDateTime dateTimeMeeting4 = LocalDateTime.of(2019,10,29,14,30);
-    private static LocalDateTime dateTimeEndMeeting4 = LocalDateTime.of(2019,10,29,15,30);
+    private static final LocalDateTime dateTimeMeeting0 = LocalDateTime.of(2019,10,25,10,00);
+    private static final LocalDateTime dateTimeEndMeeting0 = LocalDateTime.of(2019,10,25,10,45);
+    private static final LocalDateTime dateTimeMeeting1 = LocalDateTime.of(2019,10,26,18,00);
+    private static final LocalDateTime dateTimeEndMeeting1 = LocalDateTime.of(2019,10,26,19,00);
+    private static final LocalDateTime dateTimeMeeting2 = LocalDateTime.of(2019,10,24,9,00);
+    private static final LocalDateTime dateTimeEndMeeting2 = LocalDateTime.of(2019,10,24,9,30);
+    private static final LocalDateTime dateTimeMeeting3 = LocalDateTime.of(2019,10,28,15,00);
+    private static final LocalDateTime dateTimeEndMeeting3 = LocalDateTime.of(2019,10,28,15,45);
+    private static final LocalDateTime dateTimeMeeting4 = LocalDateTime.of(2019,10,29,14,30);
+    private static final LocalDateTime dateTimeEndMeeting4 = LocalDateTime.of(2019,10,29,15,30);
 
     public static final List<Meeting> DUMMY_MEETINGS = Arrays.asList(
             new Meeting(0, "Réunion A", dateTimeMeeting0, dateTimeEndMeeting0,

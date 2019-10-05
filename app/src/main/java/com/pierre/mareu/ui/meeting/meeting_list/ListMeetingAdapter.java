@@ -49,7 +49,7 @@ public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingA
         private final TextView mParticipantsTextView;
         private final TextView mTimeTextView;
         private final TextView mRoomTextView;
-        private ImageButton mDeleteImageButton;
+        private final ImageButton mDeleteImageButton;
 
         public ViewHolder(View view) {
             super(view);

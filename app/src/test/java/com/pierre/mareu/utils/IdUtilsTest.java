@@ -1,9 +1,7 @@
-package com.pierre.mareu.Utils;
+package com.pierre.mareu.utils;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class IdUtilsTest {
 

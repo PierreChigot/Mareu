@@ -1,4 +1,4 @@
-package com.pierre.mareu.Utils;
+package com.pierre.mareu.utils;
 
 
 import android.util.Log;

@@ -1,4 +1,4 @@
-package com.pierre.mareu.Utils;
+package com.pierre.mareu.utils;
 
 import com.pierre.mareu.model.Meeting;
 

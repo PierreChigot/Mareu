@@ -3,9 +3,9 @@ package com.pierre.mareu.ui.meeting.meeting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.pierre.mareu.Utils.IdUtils;
-import com.pierre.mareu.Utils.MeetingRoomUtils;
-import com.pierre.mareu.Utils.SingleLiveEvent;
+import com.pierre.mareu.utils.IdUtils;
+import com.pierre.mareu.utils.MeetingRoomUtils;
+import com.pierre.mareu.utils.SingleLiveEvent;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.service.MeetingAPIService;
 
@@ -21,13 +21,13 @@ import java.util.Locale;
  * Created by Pierre Chigot
  */
 public class MeetingDetailsViewModel extends ViewModel {
-    private MeetingAPIService mMeetingAPIService;
+    private final MeetingAPIService mMeetingAPIService;
 
     LiveData<ViewAction> getViewActionMutableLiveData() {
         return mViewActionMutableLiveData;
     }
 
-    private SingleLiveEvent<ViewAction> mViewActionMutableLiveData = new SingleLiveEvent<>();
+    private final SingleLiveEvent<ViewAction> mViewActionMutableLiveData = new SingleLiveEvent<>();
 
     public MeetingDetailsViewModel(MeetingAPIService meetingAPIService) {
         mMeetingAPIService = meetingAPIService;
