@@ -6,14 +6,19 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.pierre.mareu.R;
 import com.pierre.mareu.ui.meeting.MeetingUIModel;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingAdapter.ViewHolder> {
@@ -22,12 +27,14 @@ public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingA
     private final OnDeleteButtonListener onDeleteButtonListener;
     private final OnItemClickedListener onItemClickedListener;
 
+
     ListMeetingAdapter(OnDeleteButtonListener listener, OnItemClickedListener onItemClickedListener) {
-       super(new DiffCallback());
-       onDeleteButtonListener = listener;
+        super(new DiffCallback());
+        onDeleteButtonListener = listener;
         this.onItemClickedListener = onItemClickedListener;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -43,15 +50,16 @@ public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingA
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView mMeetingTextView;
         private final TextView mParticipantsTextView;
         private final TextView mTimeTextView;
         private final TextView mRoomTextView;
         private final ImageButton mDeleteImageButton;
+        private final ImageView mImageView;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
 
             mMeetingTextView = view.findViewById(R.id.meeting_name_meeting_list);
@@ -59,15 +67,50 @@ public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingA
             mTimeTextView = view.findViewById(R.id.time_textView);
             mRoomTextView = view.findViewById(R.id.room_textView);
             mDeleteImageButton = view.findViewById(R.id.meeting_delete_button_meeting_list);
+            mImageView = view.findViewById(R.id.imageView);
 
 
         }
-        void bind(final MeetingUIModel model, final OnDeleteButtonListener mListener, final OnItemClickedListener onItemClickedListener){
+
+        void bind(final MeetingUIModel model, final OnDeleteButtonListener mListener, final OnItemClickedListener onItemClickedListener) {
 
             mMeetingTextView.setText(model.getName());
             mParticipantsTextView.setText(model.getParticipants());
             mTimeTextView.setText(model.getDate());
             mRoomTextView.setText(model.getMeetingRoom());
+            switch (model.getMeetingRoom()) {
+                case "Salle 1":
+                    mImageView.setImageResource(R.drawable.ic_brightness_1_red_200_24dp);
+                    break;
+                case "Salle 2":
+                    mImageView.setImageResource(R.drawable.ic_brightness_1_purple_300_24dp);
+                    break;
+                case "Salle 3":
+                    mImageView.setImageResource(R.drawable.ic_brightness_1_indigo_300_24dp);
+                    break;
+                case "Salle 4":
+                    mImageView.setImageResource(R.drawable.ic_brightness_1_amber_300_24dp);
+                    break;
+                case "Salle 5":
+                    mImageView.setImageResource(R.drawable.ic_brightness_1_brown_300_24dp);
+                    break;
+                case "Salle 6":
+                    mImageView.setImageResource(R.drawable.ic_brightness_1_deep_orange_300_24dp);
+                    break;
+                case "Salle 7":
+                    mImageView.setImageResource(R.drawable.ic_brightness_1_grey_500_24dp);
+                    break;
+                case "Salle 8" :
+                    mImageView.setImageResource(R.drawable.ic_brightness_1_light_green_300_24dp);
+                    break;
+                case "Salle 9" :
+                    mImageView.setImageResource(R.drawable.ic_brightness_1_yellow_300_24dp);
+                    break;
+                case "Salle 10" :
+                    mImageView.setImageResource(R.drawable.ic_brightness_1_pink_300_24dp);
+                    break;
+            }
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -84,6 +127,7 @@ public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingA
         }
 
     }
+
     private static class DiffCallback extends DiffUtil.ItemCallback<MeetingUIModel> {
 
         @Override
@@ -97,10 +141,12 @@ public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingA
         }
 
     }
-    public interface OnDeleteButtonListener{
+
+    public interface OnDeleteButtonListener {
         void onDeleteMeeting(int meetingId);
     }
-    public interface OnItemClickedListener{
+
+    public interface OnItemClickedListener {
         void onItemClicked(int meetingId);
     }
 

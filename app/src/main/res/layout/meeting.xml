@@ -19,17 +19,16 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width= "40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:srcCompat="@drawable/ic_brightness_1_red_200_24dp"
- />
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        />
 
     <TextView
         android:id="@+id/participants_email_meeting_list"
@@ -49,7 +48,7 @@
 
     <TextView
         android:id="@+id/meeting_name_meeting_list"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -66,66 +65,54 @@
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="-"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/participants_email_meeting_list"
         app:layout_constraintStart_toEndOf="@+id/meeting_name_meeting_list"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/meeting_name_meeting_list" />
 
     <TextView
         android:id="@+id/dash"
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="-"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/participants_email_meeting_list"
         app:layout_constraintStart_toEndOf="@+id/time_textView"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/time_textView" />
 
     <TextView
         android:id="@+id/time_textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="14h00"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/participants_email_meeting_list"
         app:layout_constraintStart_toEndOf="@+id/dash1"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/dash1" />
 
     <TextView
         android:id="@+id/room_textView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="Peach"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/participants_email_meeting_list"
         app:layout_constraintEnd_toStartOf="@+id/meeting_delete_button_meeting_list"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/dash"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/dash" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

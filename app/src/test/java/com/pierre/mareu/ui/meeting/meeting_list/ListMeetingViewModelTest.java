@@ -29,7 +29,6 @@ public class ListMeetingViewModelTest {
 
     @Mock Observer<List<MeetingUIModel>> observer;
 
-    //private MeetingAPIService service = DI.getMeetingApiService();
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
@@ -52,7 +51,7 @@ public class ListMeetingViewModelTest {
         MeetingAPIService service = DI.getNewInstanceApiService();
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
 
-        viewModel.getUiModelsLiveData().observeForever(observer);
+        //viewModel.getUiModelsLiveData().observeForever(observer);
         LocalDateTime dateTimeMeeting0 = LocalDateTime.of(2019, 11, 25, 10, 0);
         LocalDateTime dateTimeEndMeeting0 = LocalDateTime.of(2019, 11, 25, 10, 45);
         Meeting meetingToAdd = new Meeting(12,"meetingToAdd",
