@@ -23,11 +23,13 @@ import java.util.Locale;
 public class MeetingDetailsViewModel extends ViewModel {
     private final MeetingAPIService mMeetingAPIService;
 
+    private final SingleLiveEvent<ViewAction> mViewActionMutableLiveData = new SingleLiveEvent<>();
+
     LiveData<ViewAction> getViewActionMutableLiveData() {
         return mViewActionMutableLiveData;
     }
 
-    private final SingleLiveEvent<ViewAction> mViewActionMutableLiveData = new SingleLiveEvent<>();
+
 
     public MeetingDetailsViewModel(MeetingAPIService meetingAPIService) {
         mMeetingAPIService = meetingAPIService;
@@ -39,7 +41,8 @@ public class MeetingDetailsViewModel extends ViewModel {
                      List<String> participants,
                      int meetingId) {
         Meeting meeting;
-        if (meetingName.isEmpty() || meetingRoom.isEmpty() || participants.isEmpty() || dateTimeBegin == null || dateTimeEnd == null){
+        if (meetingName.isEmpty() || meetingRoom.isEmpty() || participants.isEmpty()
+                || dateTimeBegin == null || dateTimeEnd == null){
             mViewActionMutableLiveData.setValue(ViewAction.DISPLAY_ERROR);
         }else if ((meetingId == -1) && MeetingRoomUtils.MeetingRoomIsAlreadyReserved(mMeetingAPIService.getMeetings(),
                 dateTimeBegin,dateTimeEnd,meetingRoom)){
