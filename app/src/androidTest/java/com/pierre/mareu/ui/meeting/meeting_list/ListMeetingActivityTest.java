@@ -1,30 +1,36 @@
 package com.pierre.mareu.ui.meeting.meeting_list;
 
-import android.util.Log;
+import android.app.Instrumentation;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
+import android.widget.EditText;
+
+import android.widget.TextView;
+
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.Espresso;
+
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.matcher.RootMatchers;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 
 import com.pierre.mareu.R;
+import com.pierre.mareu.ui.meeting.meeting.MeetingDetailsActivity;
 import com.pierre.mareu.ui.meeting.meeting_list.utils.DeleteViewAction;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
+
 import org.hamcrest.TypeSafeMatcher;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.Objects;
+
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
@@ -33,9 +39,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static com.pierre.mareu.ui.meeting.meeting_list.utils.RecyclerViewItemCountAssertion.withItemCount;
+import static junit.framework.TestCase.assertNotNull;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.not;
+
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.*;
 
@@ -43,10 +52,14 @@ public class ListMeetingActivityTest {
     @Rule
     public final ActivityTestRule<ListMeetingActivity> mActivityRule =
             new ActivityTestRule(ListMeetingActivity.class);
+    public final ActivityTestRule<MeetingDetailsActivity> mDetailsActivityRule =
+            new ActivityTestRule(MeetingDetailsActivity.class);
+
 
     @Before
     public void setUp()  {
         ListMeetingActivity activity = mActivityRule.getActivity();
+        MeetingDetailsActivity detailsActivity = mDetailsActivityRule.getActivity();
         assertThat(activity, notNullValue());
     }
     /**
@@ -62,7 +75,7 @@ public class ListMeetingActivityTest {
      * When we delete an item, the item is no more shown
      */
     @Test
-    public void myMeetingsList_deleteAction_shouldRemoveItem() {
+    public void myMeetingsList_deleteAction_shouldRemoveItem() throws InterruptedException {
         // Get items count before action
         int ITEMS_COUNT = 5;
         onView(ViewMatchers.withId(R.id.list)).check(withItemCount(ITEMS_COUNT));
@@ -70,32 +83,89 @@ public class ListMeetingActivityTest {
         onView(ViewMatchers.withId(R.id.list))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, new DeleteViewAction()));
         // Then : the number of element is 4
-        onView(ViewMatchers.withId(R.id.list)).check(withItemCount(ITEMS_COUNT - 1));
-
-
+        ITEMS_COUNT = ITEMS_COUNT - 1;
+        //TODO : another Solution :
+        Thread.sleep(500);
+        onView(ViewMatchers.withId(R.id.list)).check(withItemCount(ITEMS_COUNT));
     }
 
-    @Test
-    public void testSampleRecyclerVisible() {
-        Espresso.onView(ViewMatchers.withId(R.id.list))
-                .inRoot(RootMatchers.withDecorView(
-                        Matchers.is(mActivityRule.getActivity().getWindow().getDecorView())))
-                .check(matches(isDisplayed()));
-    }
-    @Test
-    public void onOptionsItemSelected() {
-    }
 
     @Test
-    public void onCreateOptionsMenu() {
+    public void myMeetingList_byDefaultIsSortedByDate_shouldDisplayTheRightItemAtTheFirstPlace() {
+        RecyclerView recyclerView = mActivityRule.getActivity().findViewById(R.id.list);
+        TextView textView1 = recyclerView.getChildAt(0).findViewById(R.id.time_textView);
+        Assert.assertEquals("24/10 09:00",textView1.getText());
+        TextView textView2 = recyclerView.getChildAt(1).findViewById(R.id.time_textView);
+        Assert.assertEquals("25/10 10:00",textView2.getText());
+        TextView textView3 = recyclerView.getChildAt(2).findViewById(R.id.time_textView);
+        Assert.assertEquals("26/10 18:00",textView3.getText());
+        TextView textView4 = recyclerView.getChildAt(3).findViewById(R.id.time_textView);
+        Assert.assertEquals("28/10 15:00",textView4.getText());
+        TextView textView5 = recyclerView.getChildAt(4).findViewById(R.id.time_textView);
+        Assert.assertEquals("29/10 14:30",textView5.getText());
+
+    }
+    @Test
+    public void myMeetingList_onOptionsItemSelectedSortByPlace_shouldDisplayTheRightItemAtTheFirstPlace() throws InterruptedException {
+
+        ViewInteraction overflowMenuButton2 = onView(
+                allOf(withContentDescription("ActionButtonSorting"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.toolbar),
+                                        1),
+                                0),
+                        isDisplayed()));
+        overflowMenuButton2.perform(click());
+        ViewInteraction appCompatTextView2 = onView(
+                allOf(withId(R.id.title), withText("Par lieu"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        appCompatTextView2.perform(click());
+        //TODO : another Solution :
+        Thread.sleep(500);
+        RecyclerView recyclerView = mActivityRule.getActivity().findViewById(R.id.list);
+        TextView textView1 = recyclerView.getChildAt(0).findViewById(R.id.room_textView);
+        Assert.assertEquals("Salle 2",textView1.getText());
+        TextView textView2 = recyclerView.getChildAt(1).findViewById(R.id.room_textView);
+        Assert.assertEquals("Salle 3",textView2.getText());
+        TextView textView3 = recyclerView.getChildAt(2).findViewById(R.id.room_textView);
+        Assert.assertEquals("Salle 4",textView3.getText());
+        TextView textView4 = recyclerView.getChildAt(3).findViewById(R.id.room_textView);
+        Assert.assertEquals("Salle 5",textView4.getText());
+        TextView textView5 = recyclerView.getChildAt(4).findViewById(R.id.room_textView);
+        Assert.assertEquals("Salle 6",textView5.getText());
     }
 
-    @Test
-    public void onDeleteMeeting() {
-    }
 
+    /**
+     * When we click an item, we have the details activity displayed with the right meeting name
+     */
     @Test
-    public void onItemClicked() {
+    public void myMeetingList_onItemClicked_shouldDisplayTheDetailsActivityWithTheRightName() {
+        //Given : We are waiting MeetingDetailsActivity
+        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation()
+                .addMonitor(MeetingDetailsActivity.class.getName(), null, false);
+        //When perform a click on the item at position 2 we save the name of the item in the "expectedText"
+        RecyclerView recyclerView = mActivityRule.getActivity().findViewById(R.id.list);
+        TextView textView = recyclerView.getChildAt(2).findViewById(R.id.meeting_name_meeting_list);
+        String expectedText = textView.getText().toString();
+        onView(ViewMatchers.withId(R.id.list))
+                .perform(RecyclerViewActions.actionOnItemAtPosition(2, click()));
+
+        //Then : MeetingDetailsActivity is launched
+        MeetingDetailsActivity meetingDetailsActivity = (MeetingDetailsActivity) activityMonitor.waitForActivity();
+        assertNotNull(meetingDetailsActivity);
+        //and the name in the Edittext is corresponding to the expected text
+        EditText editText;
+        editText = meetingDetailsActivity.findViewById(R.id.meetingName_editText);
+        assertEquals(expectedText,editText.getText().toString());
+
+
     }
     private static Matcher<View> childAtPosition(
             final Matcher<View> parentMatcher, final int position) {
@@ -115,4 +185,5 @@ public class ListMeetingActivityTest {
             }
         };
     }
+
 }
