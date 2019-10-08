@@ -58,6 +58,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
     private int mYear = -1, mMonth = -1, mDay = -1, mBeginHour = 0, mBeginMinutes = 0, mEndHour = 0, mEndMinutes = 0;
     private MeetingDetailsViewModel mMeetingDetailsViewModel;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -280,6 +281,9 @@ public class MeetingDetailsActivity extends AppCompatActivity {
             Toast.makeText(MeetingDetailsActivity.this, getString(R.string.error_message_date_and_time), Toast.LENGTH_LONG).show();
         }
         String meetingRoom = mMeetingRoomsSpinner.getSelectedItem().toString();
+        if (meetingRoom.equals(getString(R.string.choose_meetingRoom))){
+            meetingRoom = "error";
+        }
         List<String> participants = new ArrayList<>();
         for (int j = 0; j < mParticipantsChipGroup.getChildCount(); j++) {
             Chip chip = (Chip) mParticipantsChipGroup.getChildAt(j);

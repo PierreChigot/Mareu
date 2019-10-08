@@ -3,6 +3,7 @@ package com.pierre.mareu.ui.meeting.meeting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.pierre.mareu.R;
 import com.pierre.mareu.utils.IdUtils;
 import com.pierre.mareu.utils.MeetingRoomUtils;
 import com.pierre.mareu.utils.SingleLiveEvent;
@@ -41,7 +42,8 @@ public class MeetingDetailsViewModel extends ViewModel {
                      List<String> participants,
                      int meetingId) {
         Meeting meeting;
-        if (meetingName.isEmpty() || meetingRoom.isEmpty() || participants.isEmpty()
+
+        if (meetingName.isEmpty() || meetingRoom.equals("error")|| participants.isEmpty()
                 || dateTimeBegin == null || dateTimeEnd == null){
             mViewActionMutableLiveData.setValue(ViewAction.DISPLAY_ERROR);
         }else if ((meetingId == -1) && MeetingRoomUtils.MeetingRoomIsAlreadyReserved(mMeetingAPIService.getMeetings(),
