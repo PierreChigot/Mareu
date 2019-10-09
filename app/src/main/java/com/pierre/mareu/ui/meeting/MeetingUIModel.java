@@ -1,5 +1,7 @@
 package com.pierre.mareu.ui.meeting;
 
+import androidx.annotation.ColorRes;
+import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 
 
@@ -12,13 +14,18 @@ public class MeetingUIModel {
     private final String date;
     private final String participants;
     private final String meetingRoom;
+    @ColorRes
+    private final int drawableRes;
 
-    public MeetingUIModel(int id, String name, String dateTime, String participants, String meetingRoom) {
+
+    public MeetingUIModel(int id, String name, String dateTime, String participants, String meetingRoom, @DrawableRes int drawableRes) {
+
         this.id = id;
         this.name = name;
         this.date = dateTime;
         this.participants = participants;
         this.meetingRoom = meetingRoom;
+        this.drawableRes = drawableRes;
     }
 
     public int getId() {
@@ -40,6 +47,12 @@ public class MeetingUIModel {
     public String getMeetingRoom() {
         return meetingRoom;
     }
+
+    @ColorRes
+    public int getDrawableRes() {
+        return drawableRes;
+    }
+
 
     @Override
     public boolean equals(@Nullable Object o) {

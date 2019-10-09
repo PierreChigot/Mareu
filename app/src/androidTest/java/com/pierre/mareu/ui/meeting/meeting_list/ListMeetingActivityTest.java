@@ -84,7 +84,7 @@ public class ListMeetingActivityTest {
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, new DeleteViewAction()));
         // Then : the number of element is 4
         ITEMS_COUNT = ITEMS_COUNT - 1;
-        //TODO : another Solution :
+        //TODO 4 : another Solution :
         Thread.sleep(500);
         onView(ViewMatchers.withId(R.id.list)).check(withItemCount(ITEMS_COUNT));
     }

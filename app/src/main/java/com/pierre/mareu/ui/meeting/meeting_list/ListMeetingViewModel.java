@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.pierre.mareu.R;
 import com.pierre.mareu.utils.MeetingSort;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.service.MeetingAPIService;
@@ -48,19 +49,57 @@ class ListMeetingViewModel extends ViewModel {
             Collections.sort(updatedMeetings, comparatorRoom);
         }
 
+
         String date = "";
         for (Meeting updatedMeeting : updatedMeetings) {
             if (updatedMeeting.getDateTimeBegin() != null){
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM HH:mm", Locale.FRANCE);
                 date = updatedMeeting.getDateTimeBegin().format(formatter);
+
+            }
+
+            int drawableRes = 0;
+            switch (updatedMeeting.getMeetingRoom()) {
+                case "Salle 1":
+                    drawableRes = R.drawable.ic_brightness_1_red_200_24dp;
+                    break;
+                case "Salle 2":
+                    drawableRes = R.drawable.ic_brightness_1_purple_300_24dp;
+                    break;
+                case "Salle 3":
+                    drawableRes = R.drawable.ic_brightness_1_indigo_300_24dp;
+                    break;
+                case "Salle 4":
+                    drawableRes = R.drawable.ic_brightness_1_amber_300_24dp;
+                    break;
+                case "Salle 5":
+                    drawableRes = R.drawable.ic_brightness_1_brown_300_24dp;
+                    break;
+                case "Salle 6":
+                    drawableRes = R.drawable.ic_brightness_1_deep_orange_300_24dp;
+                    break;
+                case "Salle 7":
+                    drawableRes = R.drawable.ic_brightness_1_grey_500_24dp;
+                    break;
+                case "Salle 8" :
+                    drawableRes = R.drawable.ic_brightness_1_light_green_300_24dp;
+                    break;
+                case "Salle 9" :
+                    drawableRes = R.drawable.ic_brightness_1_yellow_300_24dp;
+                    break;
+                case "Salle 10" :
+                    drawableRes = R.drawable.ic_brightness_1_pink_300_24dp;
+                    break;
             }
             uiModels.add(new MeetingUIModel(
                     updatedMeeting.getId(),
                     updatedMeeting.getName(),
                     updatedMeeting.getDateTimeBegin() == null? "date nul" : date,
                     updatedMeeting.getParticipants(),
-                    updatedMeeting.getMeetingRoom()));
+                    updatedMeeting.getMeetingRoom(),
+                    drawableRes));
         }
+
 
 
         mUiModelsLiveData.setValue(uiModels);

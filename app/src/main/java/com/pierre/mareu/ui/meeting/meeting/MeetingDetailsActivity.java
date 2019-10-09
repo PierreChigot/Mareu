@@ -220,7 +220,9 @@ public class MeetingDetailsActivity extends AppCompatActivity {
                         Toast.makeText(MeetingDetailsActivity.this, R.string.its_not_an_email_message
                                 , Toast.LENGTH_SHORT).show();
                     } else {
+
                         final Chip chip = addChip(participant);
+                        //TODO : E/om.pierre.mare: Invalid ID 0x00000000.
                         mParticipantsChipGroup.addView(chip);
                         chip.setOnCloseIconClickListener(new View.OnClickListener() {
                             @Override

@@ -70,6 +70,7 @@ public class ListMeetingActivity extends AppCompatActivity implements ListMeetin
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
         int idItem = item.getItemId();
         if (idItem == R.id.sort_date){
             item.setChecked(true);
@@ -88,10 +89,11 @@ public class ListMeetingActivity extends AppCompatActivity implements ListMeetin
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu,menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
 
         return true;
     }
+
     @Override
     public void onDeleteMeeting(int meetingId) {
 
@@ -101,7 +103,7 @@ public class ListMeetingActivity extends AppCompatActivity implements ListMeetin
     @Override
     public void onItemClicked(int meetingId) {
         Intent rankingActivityIntent = new Intent(ListMeetingActivity.this, MeetingDetailsActivity.class);
-        rankingActivityIntent.putExtra("ID",meetingId);
+        rankingActivityIntent.putExtra("ID", meetingId);
         startActivity(rankingActivityIntent);
 
     }

@@ -1,15 +1,18 @@
 package com.pierre.mareu.ui.meeting.meeting;
 
 import android.app.Instrumentation;
+import android.os.IBinder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.WindowManager;
 import android.widget.DatePicker;
 
 import android.widget.TimePicker;
 
 
 import androidx.test.espresso.DataInteraction;
+import androidx.test.espresso.Root;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.rule.ActivityTestRule;
@@ -20,6 +23,7 @@ import com.pierre.mareu.di.DI;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.service.MeetingAPIService;
 import com.pierre.mareu.ui.meeting.meeting_list.ListMeetingActivity;
+import com.pierre.mareu.ui.meeting.meeting_list.utils.ToastMatcher;
 
 
 import org.hamcrest.Description;
@@ -40,6 +44,7 @@ import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.RootMatchers.withDecorView;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -69,6 +74,8 @@ public class MeetingDetailsActivityTest {
      */
     @Test
     public void myMeetingDetails_ifTheEndsTimeIsBeforeTheBeginsTime_shouldDisplayAToastAndTheMeetingShouldNotAddToAPI() {
+        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation()
+                .addMonitor(MeetingDetailsActivity.class.getName(), null, false);
 
         //We ensure the size of the list of the API
         service = DI.getNewInstanceApiService();
@@ -147,14 +154,24 @@ public class MeetingDetailsActivityTest {
                                 0)));
         materialButton5.perform(scrollTo(), click());
 
+
         // the size of the list of the API must be the same as before :
         List<Meeting> meetingsAfterChanges = DI.getMeetingApiService().getMeetings();
         assertEquals(size, meetingsAfterChanges.size());
+        //TODO 2 !!!!
         // the toast with the good message must be displayed :
-       /* onView(withText(R.string.error_message_time)).inRoot(new ToastMatcher())
-                .check(matches(isDisplayed()));
-        onView(withText(R.string.error_message_time)).*/
+        onView(withText(R.string.error_message_time)).inRoot(withDecorView(not(is(mActivityTestRule.
+                getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+        //onView(withText(R.string.error_message_time)).inRoot(new ToastMatcher())
+        //        .check(matches(isDisplayed()));
 
+        //onView(withText(R.string.error_message_time)).
+        //MeetingDetailsActivity meetingDetailsActivity = (MeetingDetailsActivity) activityMonitor.waitForActivity();
+        //onView(withText(R.string.error_message_time)).check(matches(isDisplayed()));
+        //onView(withText(R.string.error_message_time)).inRoot(withDecorView(
+        //        not(is(mDetailsActivityTestRule.getActivity().
+        //                getWindow().getDecorView())))).
+        //        check(matches(isDisplayed()));
 
         //onView(withText(R.string.error_message_time)).inRoot(withDecorView(not(mDetailsActivityTestRule
         //       .getActivity().getWindow().getDecorView()))).check(matches(isDisplayed()));
@@ -234,6 +251,7 @@ public class MeetingDetailsActivityTest {
 
         List<Meeting> meetingsAfterChanges = DI.getMeetingApiService().getMeetings();
         assertEquals(size, meetingsAfterChanges.size());
+        //TODO verif toast
 
     }
 
@@ -316,6 +334,7 @@ public class MeetingDetailsActivityTest {
 
         List<Meeting> meetingsAfterChanges = DI.getMeetingApiService().getMeetings();
         assertEquals(size, meetingsAfterChanges.size());
+        //TODO verif Toast
     }
 
     /**
@@ -399,6 +418,7 @@ public class MeetingDetailsActivityTest {
 
         List<Meeting> meetingsAfterChanges = DI.getMeetingApiService().getMeetings();
         assertEquals(size, meetingsAfterChanges.size());
+        //TODO verif Toast
     }
 
     /**
@@ -479,6 +499,7 @@ public class MeetingDetailsActivityTest {
         materialButton4.perform(scrollTo(), click());
         List<Meeting> meetingsAfterChanges = DI.getMeetingApiService().getMeetings();
         assertEquals(size, meetingsAfterChanges.size());
+        //TODO verif Toast
     }
 
     /**
@@ -546,6 +567,7 @@ public class MeetingDetailsActivityTest {
 
         List<Meeting> meetingsAfterChanges = DI.getMeetingApiService().getMeetings();
         assertEquals(size, meetingsAfterChanges.size());
+        //TODO verif Toast
     }
 
     /**
@@ -620,6 +642,7 @@ public class MeetingDetailsActivityTest {
 
         List<Meeting> meetingsAfterChanges = DI.getMeetingApiService().getMeetings();
         assertEquals(size, meetingsAfterChanges.size());
+        //TODO verif Toast
     }
 
     /**
@@ -664,9 +687,10 @@ public class MeetingDetailsActivityTest {
         ChipGroup chipGroup = meetingDetailsActivity.findViewById(R.id.chipGroup);
 
         assertEquals(0,chipGroup.getChildCount());
+        //TODO verif Toast
 
     }
-    //TODO faire test des champs bien rempli ??
+    //TODO 5 faire test des champs bien rempli quand on fait une modif de meeting??
 
 
     private static Matcher<View> childAtPosition(
@@ -698,6 +722,33 @@ public class MeetingDetailsActivityTest {
         onView(withId(timePickerLaunchViewId)).perform(click());
         onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(hour, minute));
         onView(withId(android.R.id.button1)).perform(click());
+    }
+    /**
+     * Matcher that is Toast window.
+     */
+    public static Matcher<Root> isToast() {
+        return new TypeSafeMatcher<Root>() {
+
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("is toast");
+            }
+
+            @Override
+            public boolean matchesSafely(Root root) {
+                int type = root.getWindowLayoutParams().get().type;
+                if ((type == WindowManager.LayoutParams.TYPE_TOAST)) {
+                    IBinder windowToken = root.getDecorView().getWindowToken();
+                    IBinder appToken = root.getDecorView().getApplicationWindowToken();
+                    if (windowToken == appToken) {
+                        // windowToken == appToken means this window isn't contained by any other windows.
+                        // if it was a window for an activity, it would have TYPE_BASE_APPLICATION.
+                        return true;
+                    }
+                }
+                return false;
+            }
+        };
     }
 
 

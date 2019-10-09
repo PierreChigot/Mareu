@@ -27,23 +27,19 @@ import static org.junit.Assert.*;
 
 public class ListMeetingViewModelTest {
 
-    @Mock Observer<List<MeetingUIModel>> observer;
 
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
-
-    @Before
-
-    public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-    }
 
 
     @Test
     public void getUiModelsLiveData() {
         MeetingAPIService service = DI.getNewInstanceApiService();
+
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
-        assertEquals(2, Objects.requireNonNull(viewModel.getUiModelsLiveData().getValue()).get(0).getId());
+
+        assertNotNull(viewModel.getUiModelsLiveData().getValue());
+        assertEquals(2,viewModel.getUiModelsLiveData().getValue().get(0).getId());
     }
 
     @Test

@@ -78,38 +78,7 @@ public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingA
             mParticipantsTextView.setText(model.getParticipants());
             mTimeTextView.setText(model.getDate());
             mRoomTextView.setText(model.getMeetingRoom());
-            switch (model.getMeetingRoom()) {
-                case "Salle 1":
-                    mImageView.setImageResource(R.drawable.ic_brightness_1_red_200_24dp);
-                    break;
-                case "Salle 2":
-                    mImageView.setImageResource(R.drawable.ic_brightness_1_purple_300_24dp);
-                    break;
-                case "Salle 3":
-                    mImageView.setImageResource(R.drawable.ic_brightness_1_indigo_300_24dp);
-                    break;
-                case "Salle 4":
-                    mImageView.setImageResource(R.drawable.ic_brightness_1_amber_300_24dp);
-                    break;
-                case "Salle 5":
-                    mImageView.setImageResource(R.drawable.ic_brightness_1_brown_300_24dp);
-                    break;
-                case "Salle 6":
-                    mImageView.setImageResource(R.drawable.ic_brightness_1_deep_orange_300_24dp);
-                    break;
-                case "Salle 7":
-                    mImageView.setImageResource(R.drawable.ic_brightness_1_grey_500_24dp);
-                    break;
-                case "Salle 8" :
-                    mImageView.setImageResource(R.drawable.ic_brightness_1_light_green_300_24dp);
-                    break;
-                case "Salle 9" :
-                    mImageView.setImageResource(R.drawable.ic_brightness_1_yellow_300_24dp);
-                    break;
-                case "Salle 10" :
-                    mImageView.setImageResource(R.drawable.ic_brightness_1_pink_300_24dp);
-                    break;
-            }
+            mImageView.setImageResource(model.getDrawableRes());
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
