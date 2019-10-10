@@ -84,7 +84,6 @@ public class ListMeetingActivityTest {
                 .perform(RecyclerViewActions.actionOnItemAtPosition(1, new DeleteViewAction()));
         // Then : the number of element is 4
         ITEMS_COUNT = ITEMS_COUNT - 1;
-        //TODO 4 : another Solution :
         Thread.sleep(500);
         onView(ViewMatchers.withId(R.id.list)).check(withItemCount(ITEMS_COUNT));
     }
@@ -126,7 +125,6 @@ public class ListMeetingActivityTest {
                                 0),
                         isDisplayed()));
         appCompatTextView2.perform(click());
-        //TODO : another Solution :
         Thread.sleep(500);
         RecyclerView recyclerView = mActivityRule.getActivity().findViewById(R.id.list);
         TextView textView1 = recyclerView.getChildAt(0).findViewById(R.id.room_textView);

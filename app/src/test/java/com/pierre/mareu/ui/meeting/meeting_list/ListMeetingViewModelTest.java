@@ -54,7 +54,8 @@ public class ListMeetingViewModelTest {
                 dateTimeMeeting0, dateTimeEndMeeting0,"Salle", "meetingTestRoom");
         service.addMeeting(meetingToAdd);
         viewModel.refresh();
-        assertEquals(12, Objects.requireNonNull(viewModel.getUiModelsLiveData().getValue()).get(5).getId());
+        assertNotNull(viewModel.getUiModelsLiveData().getValue());
+        assertEquals(12, viewModel.getUiModelsLiveData().getValue().get(5).getId());
 
     }
 
@@ -63,7 +64,8 @@ public class ListMeetingViewModelTest {
         MeetingAPIService service = DI.getNewInstanceApiService();
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
         viewModel.sortByPlace();
-        assertEquals("Salle 2", Objects.requireNonNull(viewModel.getUiModelsLiveData().getValue()).get(0).getMeetingRoom());
+        assertNotNull(viewModel.getUiModelsLiveData().getValue());
+        assertEquals("Salle 2", viewModel.getUiModelsLiveData().getValue().get(0).getMeetingRoom());
 
     }
 
@@ -71,7 +73,8 @@ public class ListMeetingViewModelTest {
     public void sortByDate() {
         MeetingAPIService service = DI.getNewInstanceApiService();
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
-        assertEquals("24/10 09:00", Objects.requireNonNull(viewModel.getUiModelsLiveData().getValue()).get(0).getDate());
+        assertNotNull(viewModel.getUiModelsLiveData().getValue());
+        assertEquals("24/10 09:00", viewModel.getUiModelsLiveData().getValue().get(0).getDate());
     }
 
     @Test
@@ -79,7 +82,8 @@ public class ListMeetingViewModelTest {
         MeetingAPIService service = DI.getNewInstanceApiService();
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
         Meeting meetingToDelete = service.getMeetings().get(0);
-        MeetingUIModel meetingUIModel = Objects.requireNonNull(viewModel.getUiModelsLiveData().getValue()).get(0);
+        assertNotNull(viewModel.getUiModelsLiveData().getValue());
+        MeetingUIModel meetingUIModel = viewModel.getUiModelsLiveData().getValue().get(0);
         viewModel.deleteMeeting(meetingToDelete.getId());
         assertFalse(service.getMeetings().contains(meetingToDelete));
         assertFalse(viewModel.getUiModelsLiveData().getValue().contains(meetingUIModel));

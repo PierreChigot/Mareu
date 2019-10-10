@@ -1,24 +1,16 @@
 package com.pierre.mareu.ui.meeting.meeting;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.LifecycleRegistry;
-import androidx.lifecycle.Observer;
 
 import com.pierre.mareu.di.DI;
 import com.pierre.mareu.model.Meeting;
 
 import com.pierre.mareu.service.MeetingAPIService;
-import com.pierre.mareu.utils.SingleLiveEvent;
 
 
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
@@ -28,10 +20,7 @@ import java.util.List;
 
 
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+
 
 public class MeetingDetailsViewModelTest {
 
@@ -40,16 +29,9 @@ public class MeetingDetailsViewModelTest {
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
 
-    @Before
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-
-
-    }
-
 
     @Test
-    public void saveMeeting() {
+    public void saveMeetingWithSuccess() {
 
         MeetingAPIService service = DI.getNewInstanceApiService();
         MeetingDetailsViewModel meetingDetailsViewModel = new MeetingDetailsViewModel(service);
@@ -73,9 +55,6 @@ public class MeetingDetailsViewModelTest {
 
         assertEquals(ViewAction.OK,meetingDetailsViewModel.getViewActionMutableLiveData().getValue());
 
-        //TODO 3 ??? view action test dans UI test ???
-
-
     }
     @Test
     public void shouldNotSaveMeetingIfNoMeetingName() {
@@ -85,20 +64,94 @@ public class MeetingDetailsViewModelTest {
         List<String> participants = new ArrayList<>();
         participants.add("tao@citedor.com");
         participants.add("vincent@team.fr");
-        LocalDateTime begin = LocalDateTime.of(2019, 12, 25, 12, 0);
-        LocalDateTime end = LocalDateTime.of(2019, 12, 25, 12, 30);
 
         meetingDetailsViewModel.saveMeeting("", "le palace",
                 LocalDateTime.of(2019, 12, 25, 12, 0),
                 LocalDateTime.of(2019, 12, 25, 12, 30), participants, 50);
 
 
+        assertEquals(ViewAction.DISPLAY_ERROR,meetingDetailsViewModel.getViewActionMutableLiveData().getValue());
+    }
+    @Test
+    public void shouldNotSaveMeetingIfNoMeetingBeginDate() {
+
+        MeetingAPIService service = DI.getNewInstanceApiService();
+        MeetingDetailsViewModel meetingDetailsViewModel = new MeetingDetailsViewModel(service);
+        List<String> participants = new ArrayList<>();
+        participants.add("tao@citedor.com");
+        participants.add("vincent@team.fr");
+
+        meetingDetailsViewModel.saveMeeting("Test name", "le palace",
+                null,
+                LocalDateTime.of(2019, 12, 25, 12, 30), participants, 50);
+
 
         assertEquals(ViewAction.DISPLAY_ERROR,meetingDetailsViewModel.getViewActionMutableLiveData().getValue());
+    }
+    @Test
+    public void shouldNotSaveMeetingIfNoMeetingEndDate() {
 
-        //TODO 3 ??? view action test dans UI test ???
+        MeetingAPIService service = DI.getNewInstanceApiService();
+        MeetingDetailsViewModel meetingDetailsViewModel = new MeetingDetailsViewModel(service);
+        List<String> participants = new ArrayList<>();
+        participants.add("tao@citedor.com");
+        participants.add("vincent@team.fr");
+
+        meetingDetailsViewModel.saveMeeting("Test name", "le palace",
+                LocalDateTime.of(2019, 12, 25, 12, 0),
+               null, participants, 50);
 
 
+        assertEquals(ViewAction.DISPLAY_ERROR,meetingDetailsViewModel.getViewActionMutableLiveData().getValue());
+    }
+    @Test
+    public void shouldNotSaveMeetingIfNoParticipant() {
+
+        MeetingAPIService service = DI.getNewInstanceApiService();
+        MeetingDetailsViewModel meetingDetailsViewModel = new MeetingDetailsViewModel(service);
+        List<String> participants = new ArrayList<>();
+
+
+        meetingDetailsViewModel.saveMeeting("Test name", "le palace",
+                LocalDateTime.of(2019, 12, 25, 12, 0),
+                LocalDateTime.of(2019, 12, 25, 12, 30), participants, 50);
+
+
+        assertEquals(ViewAction.DISPLAY_ERROR,meetingDetailsViewModel.getViewActionMutableLiveData().getValue());
+    }
+    @Test
+    public void shouldNotSaveMeetingIfTheEndTimeIsBeforeTheBeginTime() {
+
+        MeetingAPIService service = DI.getNewInstanceApiService();
+        MeetingDetailsViewModel meetingDetailsViewModel = new MeetingDetailsViewModel(service);
+        List<String> participants = new ArrayList<>();
+        participants.add("tao@citedor.com");
+        participants.add("vincent@team.fr");
+
+
+        meetingDetailsViewModel.saveMeeting("Test name", "le palace",
+                LocalDateTime.of(2019, 12, 25, 12, 0),
+                LocalDateTime.of(2019, 12, 25, 11, 30), participants, 50);
+
+
+        assertEquals(ViewAction.DISPLAY_ERROR_TIME,meetingDetailsViewModel.getViewActionMutableLiveData().getValue());
+    }
+    @Test
+    public void shouldNotSaveMeetingIfTheMeetingRoomIsAlreadyReserved() {
+
+        MeetingAPIService service = DI.getNewInstanceApiService();
+        MeetingDetailsViewModel meetingDetailsViewModel = new MeetingDetailsViewModel(service);
+        List<String> participants = new ArrayList<>();
+        participants.add("tao@citedor.com");
+        participants.add("vincent@team.fr");
+
+
+        meetingDetailsViewModel.saveMeeting("Test name", "Salle 6",
+                LocalDateTime.of(2019, 10, 29, 14, 30),
+                LocalDateTime.of(2019, 10, 29, 15, 0), participants, -1);
+
+
+        assertEquals(ViewAction.DISPLAY_ERROR_MEETING_ROOM,meetingDetailsViewModel.getViewActionMutableLiveData().getValue());
     }
     @Test
     public void formatDate() {
