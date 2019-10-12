@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.res.Resources;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +17,6 @@ import android.widget.TextView;
 import com.pierre.mareu.R;
 import com.pierre.mareu.ui.meeting.MeetingUIModel;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingAdapter.ViewHolder> {
@@ -48,7 +46,6 @@ public class ListMeetingAdapter extends ListAdapter<MeetingUIModel, ListMeetingA
 
 
     }
-
 
     class ViewHolder extends RecyclerView.ViewHolder {
 

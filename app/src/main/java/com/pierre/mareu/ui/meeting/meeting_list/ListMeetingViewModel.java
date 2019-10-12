@@ -104,6 +104,10 @@ class ListMeetingViewModel extends ViewModel {
 
         mUiModelsLiveData.setValue(uiModels);
     }
+    void reset(){
+        List<MeetingUIModel> uiModels = new ArrayList<>();
+        mUiModelsLiveData.postValue(uiModels);
+    }
     void sortByPlace(){
         mSortByDate = false;
         refresh();

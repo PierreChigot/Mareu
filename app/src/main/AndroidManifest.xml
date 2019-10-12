@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.pierre.mareu">
 
     <application
@@ -10,10 +11,11 @@
         android:roundIcon="@drawable/ic_launcher_lamzone"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:windowSoftInputMode="stateHidden|adjustResize">
+        android:windowSoftInputMode="stateHidden|adjustResize"
+        tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".ui.meeting.meeting.MeetingDetailsActivity"
 
-            ></activity>
+            />
         <activity android:name=".ui.meeting.meeting_list.ListMeetingActivity">
 
 

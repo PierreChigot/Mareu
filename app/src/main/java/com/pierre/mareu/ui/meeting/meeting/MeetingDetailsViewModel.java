@@ -3,7 +3,6 @@ package com.pierre.mareu.ui.meeting.meeting;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.pierre.mareu.R;
 import com.pierre.mareu.utils.IdUtils;
 import com.pierre.mareu.utils.MeetingRoomUtils;
 import com.pierre.mareu.utils.SingleLiveEvent;
@@ -29,7 +28,6 @@ public class MeetingDetailsViewModel extends ViewModel {
     LiveData<ViewAction> getViewActionMutableLiveData() {
         return mViewActionMutableLiveData;
     }
-
 
 
     public MeetingDetailsViewModel(MeetingAPIService meetingAPIService) {

@@ -1,6 +1,7 @@
 package com.pierre.mareu.ui.meeting.meeting_list;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import android.view.Menu;
@@ -28,11 +29,16 @@ public class ListMeetingActivity extends AppCompatActivity implements ListMeetin
 
 
     private ListMeetingViewModel mViewModel;
+    public static final String KEY_LAST_ORIENTATION = "last_orientation";
+    private int lastOrientation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meeting_list);
+        if (savedInstanceState == null) {
+            lastOrientation = getResources().getConfiguration().orientation;
+        }
         final ListMeetingAdapter adapter = new ListMeetingAdapter(this, this);
         RecyclerView recyclerView = findViewById(R.id.list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -107,4 +113,34 @@ public class ListMeetingActivity extends AppCompatActivity implements ListMeetin
         startActivity(rankingActivityIntent);
 
     }
+    //UnComment if you want no display persistent
+    /*@Override
+    protected void onStart() {
+        checkOrientationChanged();
+        super.onStart();
+    }
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        lastOrientation = savedInstanceState.getInt(KEY_LAST_ORIENTATION);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_LAST_ORIENTATION, lastOrientation);
+    }
+
+    private void checkOrientationChanged() {
+        int currentOrientation = getResources().getConfiguration().orientation;
+        if (currentOrientation != lastOrientation) {
+            onScreenOrientationChanged(currentOrientation);
+            lastOrientation = currentOrientation;
+        }
+    }
+
+    public void onScreenOrientationChanged(int currentOrientation) {
+        mViewModel.reset();
+    }*/
+
 }

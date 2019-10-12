@@ -5,10 +5,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
@@ -25,18 +25,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.pierre.mareu.R;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.ui.meeting.meeting_list.ViewModelFactory;
-
 import org.threeten.bp.LocalDate;
 import org.threeten.bp.LocalDateTime;
 import org.threeten.bp.LocalTime;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -57,7 +54,6 @@ public class MeetingDetailsActivity extends AppCompatActivity {
     int mId;
     private int mYear = -1, mMonth = -1, mDay = -1, mBeginHour = 0, mBeginMinutes = 0, mEndHour = 0, mEndMinutes = 0;
     private MeetingDetailsViewModel mMeetingDetailsViewModel;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,7 +188,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
         mMeetingRoomsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
-                if (position > 0) {
+                if (position > 0 && view != null) {
                     TextView tv = (TextView) view;
                     tv.setTextColor(Color.BLACK);
                 }

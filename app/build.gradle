@@ -11,9 +11,15 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
+        testInstrumentationRunnerArguments clearPackageData: 'true'
+
 
 
     }
+    testOptions {
+        execution 'ANDROIDX_TEST_ORCHESTRATOR'
+    }
+
 
 
     buildTypes {
@@ -23,6 +29,7 @@ android {
         }
     }
 }
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -37,6 +44,8 @@ dependencies {
     testImplementation 'org.hamcrest:java-hamcrest:2.0.0.0'
 
     androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestUtil 'androidx.test:orchestrator:1.2.0'
+
 
 
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
@@ -54,17 +63,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:3.0.2'
 
 
-    // For espresso test cases
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
 
-    // For recycler view actions
-    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.0') {
-        exclude group: 'com.android.support', module: 'appcompat'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude module: 'recyclerview-v7'
-    }
+
 
 
 }

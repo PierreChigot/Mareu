@@ -8,6 +8,7 @@ import android.view.ViewParent;
 
 import android.widget.EditText;
 
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +18,8 @@ import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.rule.ActivityTestRule;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.pierre.mareu.R;
 import com.pierre.mareu.ui.meeting.meeting.MeetingDetailsActivity;
 import com.pierre.mareu.ui.meeting.meeting_list.utils.DeleteViewAction;
@@ -35,6 +38,7 @@ import org.junit.Test;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -50,16 +54,12 @@ import static org.junit.Assert.*;
 
 public class ListMeetingActivityTest {
     @Rule
-    public final ActivityTestRule<ListMeetingActivity> mActivityRule =
-            new ActivityTestRule(ListMeetingActivity.class);
-    public final ActivityTestRule<MeetingDetailsActivity> mDetailsActivityRule =
-            new ActivityTestRule(MeetingDetailsActivity.class);
-
+    public final ActivityTestRule<ListMeetingActivity> mActivityRule = new ActivityTestRule<>(ListMeetingActivity.class);
 
     @Before
     public void setUp()  {
         ListMeetingActivity activity = mActivityRule.getActivity();
-        MeetingDetailsActivity detailsActivity = mDetailsActivityRule.getActivity();
+
         assertThat(activity, notNullValue());
     }
     /**
@@ -163,6 +163,36 @@ public class ListMeetingActivityTest {
         editText = meetingDetailsActivity.findViewById(R.id.meetingName_editText);
         assertEquals(expectedText,editText.getText().toString());
 
+
+    }
+    @Test
+    public void myMeetingDetails_ifWeModifyAMeeting_shouldDisplayTheGoodMeeting() {
+        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation()
+                .addMonitor(MeetingDetailsActivity.class.getName(), null, false);
+        //When we click on a meeting
+        onView(allOf(withId(R.id.list), isDisplayed())).perform(actionOnItemAtPosition(0, click()));
+        //The meeting's name in the meeting's details is corresponding
+        ViewInteraction name = onView(allOf(withId(R.id.meetingName_editText),isDisplayed()));
+        name.check(matches(withText("Réunion C")));
+        //The meeting's date in the meeting's details is corresponding
+        ViewInteraction date = onView(allOf(withId(R.id.dateEdit_TextView),isDisplayed()));
+        date.check(matches(withText("jeu. 24 octobre 2019")));
+        //The meeting's begin time in the meeting's details is corresponding
+        ViewInteraction beginTime = onView(allOf(withId(R.id.beginTimeEdit_TextView),isDisplayed()));
+        beginTime.check(matches(withText("09:00")));
+        //The meeting's begin time in the meeting's details is corresponding
+        ViewInteraction endTime = onView(allOf(withId(R.id.endTimeEdit_TextView),isDisplayed()));
+        endTime.check(matches(withText("09:30")));
+        //The meeting's room in the meeting's details is corresponding
+        MeetingDetailsActivity meetingDetailsActivity = (MeetingDetailsActivity) activityMonitor.waitForActivity();
+        Spinner spinner = meetingDetailsActivity.findViewById(R.id.spinner);
+        String room = spinner.getSelectedItem().toString();
+        assertEquals("Salle 4",room);
+        //The meeting's participants in the meeting's details is corresponding
+        ChipGroup chipGroup= meetingDetailsActivity.findViewById(R.id.chipGroup);
+        Chip chip = (Chip) chipGroup.getChildAt(0);
+        String participant = chip.getText().toString();
+        assertEquals("zaphod@beltegeuse.com",participant);
 
     }
     private static Matcher<View> childAtPosition(

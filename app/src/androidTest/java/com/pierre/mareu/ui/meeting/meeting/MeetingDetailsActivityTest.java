@@ -1,6 +1,5 @@
 package com.pierre.mareu.ui.meeting.meeting;
 
-import android.app.Instrumentation;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,7 +7,9 @@ import android.view.ViewParent;
 
 import android.widget.DatePicker;
 
+
 import android.widget.TimePicker;
+
 
 
 import androidx.test.espresso.DataInteraction;
@@ -17,12 +18,13 @@ import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.contrib.PickerActions;
 import androidx.test.rule.ActivityTestRule;
 
+
 import com.google.android.material.chip.ChipGroup;
 import com.pierre.mareu.R;
 import com.pierre.mareu.di.DI;
 import com.pierre.mareu.model.Meeting;
 import com.pierre.mareu.service.MeetingAPIService;
-import com.pierre.mareu.ui.meeting.meeting_list.ListMeetingActivity;
+
 
 
 
@@ -30,6 +32,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.hamcrest.TypeSafeMatcher;
+
 
 import org.junit.Rule;
 import org.junit.Test;
@@ -49,7 +52,6 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;
@@ -60,9 +62,46 @@ import static org.junit.Assert.*;
 public class MeetingDetailsActivityTest {
     private MeetingAPIService service;
     @Rule
-    public ActivityTestRule<ListMeetingActivity> mActivityTestRule = new ActivityTestRule<>(ListMeetingActivity.class);
+    public ActivityTestRule<MeetingDetailsActivity> mActivityTestRule = new ActivityTestRule<>(MeetingDetailsActivity.class);
 
 
+
+
+
+    /**
+     * When we try to add an participant and it's not in the e-mail's format,
+     * a toast must be displayed and the participant should'nt add to the list of meeting
+     */
+    @Test
+    public void myMeetingDetails_ifWeAddParticipantWithoutEmailFormat_shouldDisplayAToastAndTheTextIsNotAddToTheChipGroup() {
+        ViewInteraction appCompatAutoCompleteTextView = onView(
+                allOf(withId(R.id.participant_autoCompleteTextView),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.textInputLayout),
+                                        0),
+                                0)));
+        appCompatAutoCompleteTextView.perform(scrollTo(), replaceText("toto@test"), closeSoftKeyboard());
+
+
+        ViewInteraction materialButton2 = onView(
+                allOf(withId(R.id.addParticipant_button), withText("Ajouter"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.meetingDetails_scrollView),
+                                        0),
+                                1)));
+        materialButton2.perform(scrollTo(), click());
+        MeetingDetailsActivity meetingDetailsActivity = mActivityTestRule.getActivity();
+
+        ChipGroup chipGroup = meetingDetailsActivity.findViewById(R.id.chipGroup);
+
+        assertEquals(0,chipGroup.getChildCount());
+        // the toast with the good message must be displayed :
+        onView(withText(R.string.its_not_an_email_message)).inRoot(withDecorView(not(is(mActivityTestRule.
+                getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+
+    }
     /**
      * When the end's time is before the begin's time,
      * a toast must be displayed and the meeting should'nt add to the list of meeting
@@ -70,22 +109,10 @@ public class MeetingDetailsActivityTest {
     @Test
     public void myMeetingDetails_ifTheEndsTimeIsBeforeTheBeginsTime_shouldDisplayAToastAndTheMeetingShouldNotAddToAPI() {
 
-
         //We ensure the size of the list of the API
         service = DI.getNewInstanceApiService();
         List<Meeting> meetings = service.getMeetings();
         int size = meetings.size();
-
-
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.add_meeting_floatingActionButton),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.meetingName_editText),
@@ -148,7 +175,6 @@ public class MeetingDetailsActivityTest {
                                 0)));
         materialButton5.perform(scrollTo(), click());
 
-
         // the size of the list of the API must be the same as before :
         List<Meeting> meetingsAfterChanges = DI.getMeetingApiService().getMeetings();
         assertEquals(size, meetingsAfterChanges.size());
@@ -170,16 +196,6 @@ public class MeetingDetailsActivityTest {
         service = DI.getNewInstanceApiService();
         List<Meeting> meetings = service.getMeetings();
         int size = meetings.size();
-
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.add_meeting_floatingActionButton),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
 
         setDate(2020, 9, 25);
 
@@ -235,7 +251,6 @@ public class MeetingDetailsActivityTest {
         // the toast with the good message must be displayed :
         onView(withText(R.string.field_isEmpty)).inRoot(withDecorView(not(is(mActivityTestRule.
                 getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-
     }
 
     /**
@@ -248,15 +263,6 @@ public class MeetingDetailsActivityTest {
         service = DI.getNewInstanceApiService();
         List<Meeting> meetings = service.getMeetings();
         int size = meetings.size();
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.add_meeting_floatingActionButton),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.meetingName_editText),
@@ -320,6 +326,7 @@ public class MeetingDetailsActivityTest {
         // the toast with the good message must be displayed :
         onView(withText(R.string.error_message_date_and_time)).inRoot(withDecorView(not(is(mActivityTestRule.
                 getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+
     }
 
     /**
@@ -332,16 +339,6 @@ public class MeetingDetailsActivityTest {
         service = DI.getNewInstanceApiService();
         List<Meeting> meetings = service.getMeetings();
         int size = meetings.size();
-
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.add_meeting_floatingActionButton),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.meetingName_editText),
@@ -407,7 +404,6 @@ public class MeetingDetailsActivityTest {
         onView(withText(R.string.error_message_date_and_time)).inRoot(withDecorView(not(is(mActivityTestRule.
                 getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
-
     /**
      * When the meeting's end's time is not filled and we try to save the meeting,
      * a toast must be displayed and the meeting should'nt add to the list of meeting
@@ -418,15 +414,6 @@ public class MeetingDetailsActivityTest {
         service = DI.getNewInstanceApiService();
         List<Meeting> meetings = service.getMeetings();
         int size = meetings.size();
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.add_meeting_floatingActionButton),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.meetingName_editText),
@@ -501,15 +488,6 @@ public class MeetingDetailsActivityTest {
         service = DI.getNewInstanceApiService();
         List<Meeting> meetings = service.getMeetings();
         int size = meetings.size();
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.add_meeting_floatingActionButton),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.meetingName_editText),
@@ -571,15 +549,6 @@ public class MeetingDetailsActivityTest {
         service = DI.getNewInstanceApiService();
         List<Meeting> meetings = service.getMeetings();
         int size = meetings.size();
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.add_meeting_floatingActionButton),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
                 allOf(withId(R.id.meetingName_editText),
@@ -638,54 +607,6 @@ public class MeetingDetailsActivityTest {
                 getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
 
-    /**
-     * When we try to add an participant and it's not in the e-mail's format,
-     * a toast must be displayed and the participant should'nt add to the list of meeting
-     */
-    @Test
-    public void myMeetingDetails_ifWeAddParticipantWithoutEmailFormat_shouldDisplayAToastAndTheTextIsNotAddToTheChipGroup() {
-        Instrumentation.ActivityMonitor activityMonitor = getInstrumentation()
-                .addMonitor(MeetingDetailsActivity.class.getName(), null, false);
-        ViewInteraction floatingActionButton = onView(
-                allOf(withId(R.id.add_meeting_floatingActionButton),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                1),
-                        isDisplayed()));
-        floatingActionButton.perform(click());
-
-
-        ViewInteraction appCompatAutoCompleteTextView = onView(
-                allOf(withId(R.id.participant_autoCompleteTextView),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.textInputLayout),
-                                        0),
-                                0)));
-        appCompatAutoCompleteTextView.perform(scrollTo(), replaceText("toto@test"), closeSoftKeyboard());
-
-
-        ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.addParticipant_button), withText("Ajouter"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(R.id.meetingDetails_scrollView),
-                                        0),
-                                1)));
-        materialButton2.perform(scrollTo(), click());
-        MeetingDetailsActivity meetingDetailsActivity = (MeetingDetailsActivity) activityMonitor.waitForActivity();
-
-        ChipGroup chipGroup = meetingDetailsActivity.findViewById(R.id.chipGroup);
-
-        assertEquals(0,chipGroup.getChildCount());
-        // the toast with the good message must be displayed :
-        onView(withText(R.string.its_not_an_email_message)).inRoot(withDecorView(not(is(mActivityTestRule.
-                getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-
-    }
-    //TODO 5 faire test des champs bien rempli quand on fait une modif de meeting??
 
 
     private static Matcher<View> childAtPosition(
