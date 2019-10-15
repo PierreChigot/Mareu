@@ -12,13 +12,13 @@ import java.util.List;
  * Created by Pierre Chigot
  */
 abstract class DummyMeetingGenerator {
-    private static final LocalDateTime dateTimeMeeting0 = LocalDateTime.of(2019,12,25,10,00);
+    private static final LocalDateTime dateTimeMeeting0 = LocalDateTime.of(2019,12,25,10, 0);
     private static final LocalDateTime dateTimeEndMeeting0 = LocalDateTime.of(2019,12,25,10,45);
-    private static final LocalDateTime dateTimeMeeting1 = LocalDateTime.of(2019,12,26,18,00);
-    private static final LocalDateTime dateTimeEndMeeting1 = LocalDateTime.of(2019,12,26,19,00);
-    private static final LocalDateTime dateTimeMeeting2 = LocalDateTime.of(2019,12,24,9,00);
+    private static final LocalDateTime dateTimeMeeting1 = LocalDateTime.of(2019,12,26,18, 0);
+    private static final LocalDateTime dateTimeEndMeeting1 = LocalDateTime.of(2019,12,26,19, 0);
+    private static final LocalDateTime dateTimeMeeting2 = LocalDateTime.of(2019,12,24,9, 0);
     private static final LocalDateTime dateTimeEndMeeting2 = LocalDateTime.of(2019,12,24,9,30);
-    private static final LocalDateTime dateTimeMeeting3 = LocalDateTime.of(2019,12,28,15,00);
+    private static final LocalDateTime dateTimeMeeting3 = LocalDateTime.of(2019,12,28,15, 0);
     private static final LocalDateTime dateTimeEndMeeting3 = LocalDateTime.of(2019,12,28,15,45);
     private static final LocalDateTime dateTimeMeeting4 = LocalDateTime.of(2019,12,29,14,30);
     private static final LocalDateTime dateTimeEndMeeting4 = LocalDateTime.of(2019,12,29,15,30);

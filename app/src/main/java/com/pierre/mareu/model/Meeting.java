@@ -2,8 +2,6 @@ package com.pierre.mareu.model;
 
 import org.threeten.bp.LocalDateTime;
 
-import java.util.List;
-
 /**
  * Created by Pierre Chigot
  */

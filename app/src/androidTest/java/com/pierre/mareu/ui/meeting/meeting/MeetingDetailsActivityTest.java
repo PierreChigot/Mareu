@@ -60,13 +60,40 @@ import static org.junit.Assert.*;
 
 
 public class MeetingDetailsActivityTest {
-    private MeetingAPIService service;
     @Rule
-    public ActivityTestRule<MeetingDetailsActivity> mActivityTestRule = new ActivityTestRule<>(MeetingDetailsActivity.class);
+    public final ActivityTestRule<MeetingDetailsActivity> mActivityTestRule = new ActivityTestRule<>(MeetingDetailsActivity.class);
+    private MeetingAPIService service;
 
+    private static Matcher<View> childAtPosition(
+            final Matcher<View> parentMatcher, final int position) {
 
+        return new TypeSafeMatcher<View>() {
+            @Override
+            public void describeTo(Description description) {
+                description.appendText("Child at position " + position + " in parent ");
+                parentMatcher.describeTo(description);
+            }
 
+            @Override
+            public boolean matchesSafely(View view) {
+                ViewParent parent = view.getParent();
+                return parent instanceof ViewGroup && parentMatcher.matches(parent)
+                        && view.equals(((ViewGroup) parent).getChildAt(position));
+            }
+        };
+    }
 
+    private static void setDate(int year, int monthOfYear, int dayOfMonth) {
+        onView(withId(R.id.dateEdit_TextView)).perform(click());
+        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(year, monthOfYear, dayOfMonth));
+        onView(withId(android.R.id.button1)).perform(click());
+    }
+
+    private static void setTime(int timePickerLaunchViewId, int hour, int minute) {
+        onView(withId(timePickerLaunchViewId)).perform(click());
+        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(hour, minute));
+        onView(withId(android.R.id.button1)).perform(click());
+    }
 
     /**
      * When we try to add an participant and it's not in the e-mail's format,
@@ -102,6 +129,7 @@ public class MeetingDetailsActivityTest {
                 getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
 
     }
+
     /**
      * When the end's time is before the begin's time,
      * a toast must be displayed and the meeting should'nt add to the list of meeting
@@ -404,6 +432,7 @@ public class MeetingDetailsActivityTest {
         onView(withText(R.string.error_message_date_and_time)).inRoot(withDecorView(not(is(mActivityTestRule.
                 getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
+
     /**
      * When the meeting's end's time is not filled and we try to save the meeting,
      * a toast must be displayed and the meeting should'nt add to the list of meeting
@@ -606,6 +635,7 @@ public class MeetingDetailsActivityTest {
         onView(withText(R.string.error_message)).inRoot(withDecorView(not(is(mActivityTestRule.
                 getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
+
     @Test
     public void myMeetingDetails_ifTheMeetingRoomIsAlreadyReserved_shouldDisplayAToastAndTheMeetingShouldNotAddToAPI() {
         //We ensure the size of the list of the API
@@ -675,39 +705,6 @@ public class MeetingDetailsActivityTest {
         // the toast with the good message must be displayed :
         onView(withText(R.string.error_message_meeting_room)).inRoot(withDecorView(not(is(mActivityTestRule.
                 getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
-    }
-
-
-
-    private static Matcher<View> childAtPosition(
-            final Matcher<View> parentMatcher, final int position) {
-
-        return new TypeSafeMatcher<View>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("Child at position " + position + " in parent ");
-                parentMatcher.describeTo(description);
-            }
-
-            @Override
-            public boolean matchesSafely(View view) {
-                ViewParent parent = view.getParent();
-                return parent instanceof ViewGroup && parentMatcher.matches(parent)
-                        && view.equals(((ViewGroup) parent).getChildAt(position));
-            }
-        };
-    }
-
-    private static void setDate(int year, int monthOfYear, int dayOfMonth) {
-        onView(withId(R.id.dateEdit_TextView)).perform(click());
-        onView(withClassName(Matchers.equalTo(DatePicker.class.getName()))).perform(PickerActions.setDate(year, monthOfYear, dayOfMonth));
-        onView(withId(android.R.id.button1)).perform(click());
-    }
-
-    private static void setTime(int timePickerLaunchViewId, int hour, int minute) {
-        onView(withId(timePickerLaunchViewId)).perform(click());
-        onView(withClassName(Matchers.equalTo(TimePicker.class.getName()))).perform(PickerActions.setTime(hour, minute));
-        onView(withId(android.R.id.button1)).perform(click());
     }
 
 

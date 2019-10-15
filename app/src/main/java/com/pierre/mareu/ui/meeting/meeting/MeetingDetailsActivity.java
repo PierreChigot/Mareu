@@ -8,7 +8,6 @@ import androidx.lifecycle.ViewModelProvider;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
@@ -51,7 +50,7 @@ public class MeetingDetailsActivity extends AppCompatActivity {
     private LocalDate mDate;
     private LocalTime mBeginTime;
     private LocalTime mEndTime;
-    int mId;
+    private int mId;
     private int mYear = -1, mMonth = -1, mDay = -1, mBeginHour = 0, mBeginMinutes = 0, mEndHour = 0, mEndMinutes = 0;
     private MeetingDetailsViewModel mMeetingDetailsViewModel;
 

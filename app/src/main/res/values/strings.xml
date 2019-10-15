@@ -13,8 +13,6 @@
     <string name="add_participant">Ajouter</string>
     <string name="begin_hour_2points">Heure de début :</string>
     <string name="finish_hour_2points">Heure de fin :</string>
-    <string name="spinner_message">Veuillez choisir une salle</string>
-    <string name="participants_error_message">Entrez l\'e-mail d\'un participant</string>
     <string name="choose_meetingRoom">Veuillez choisir une salle</string>
     <string name="its_not_an_email_message">Veuillez entrer un e-mail valide</string>
     <string name="field_isEmpty">Veuillez renseigner tout les champs</string>

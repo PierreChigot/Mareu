@@ -38,10 +38,10 @@ public class SingleLiveEventTest {
     private LifecycleRegistry mLifecycle;
 
     // Event object under test
-    private SingleLiveEvent<Integer> mSingleLiveEvent = new SingleLiveEvent<>();
+    private final SingleLiveEvent<Integer> mSingleLiveEvent = new SingleLiveEvent<>();
 
     @Before
-    public void setUpLifecycles() throws Exception {
+    public void setUpLifecycles() {
         MockitoAnnotations.initMocks(this);
 
         // Link custom lifecycle owner with the lifecyle register.

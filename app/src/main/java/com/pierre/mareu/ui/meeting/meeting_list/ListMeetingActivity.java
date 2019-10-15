@@ -30,7 +30,7 @@ public class ListMeetingActivity extends AppCompatActivity implements ListMeetin
 
     private ListMeetingViewModel mViewModel;
     public static final String KEY_LAST_ORIENTATION = "last_orientation";
-    private int lastOrientation;
+    int lastOrientation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
