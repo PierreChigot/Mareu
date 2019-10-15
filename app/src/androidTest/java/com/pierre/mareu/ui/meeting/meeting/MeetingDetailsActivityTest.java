@@ -606,6 +606,76 @@ public class MeetingDetailsActivityTest {
         onView(withText(R.string.error_message)).inRoot(withDecorView(not(is(mActivityTestRule.
                 getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
     }
+    @Test
+    public void myMeetingDetails_ifTheMeetingRoomIsAlreadyReserved_shouldDisplayAToastAndTheMeetingShouldNotAddToAPI() {
+        //We ensure the size of the list of the API
+        service = DI.getNewInstanceApiService();
+        List<Meeting> meetings = service.getMeetings();
+        int size = meetings.size();
+
+        ViewInteraction appCompatEditText = onView(
+                allOf(withId(R.id.meetingName_editText),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.meetingName_TextInputLayout),
+                                        0),
+                                0)));
+        appCompatEditText.perform(scrollTo(), replaceText("essai"), closeSoftKeyboard());
+
+        setDate(2019, 12, 29);
+
+        setTime(R.id.beginTimeEdit_TextView, 14, 45);
+        setTime(R.id.endTimeEdit_TextView, 15, 30);
+
+
+        ViewInteraction appCompatSpinner = onView(
+                allOf(withId(R.id.spinner),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                2)));
+        appCompatSpinner.perform(scrollTo(), click());
+
+        DataInteraction appCompatTextView3 = onData(anything())
+                .inAdapterView(childAtPosition(
+                        withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
+                        0))
+                .atPosition(6);
+        appCompatTextView3.perform(click());
+
+        ViewInteraction appCompatAutoCompleteTextView = onView(
+                allOf(withId(R.id.participant_autoCompleteTextView),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(R.id.textInputLayout),
+                                        0),
+                                0)));
+        appCompatAutoCompleteTextView.perform(scrollTo(), replaceText("toto@test.fr"), closeSoftKeyboard());
+
+        ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.addParticipant_button), withText("Ajouter"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                1)));
+        materialButton3.perform(scrollTo(), click());
+
+        ViewInteraction materialButton4 = onView(
+                allOf(withId(R.id.saveMetting_button), withText("Enregistrer"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("android.widget.ScrollView")),
+                                        0),
+                                0)));
+        materialButton4.perform(scrollTo(), click());
+        List<Meeting> meetingsAfterChanges = DI.getMeetingApiService().getMeetings();
+        assertEquals(size, meetingsAfterChanges.size());
+        // the toast with the good message must be displayed :
+        onView(withText(R.string.error_message_meeting_room)).inRoot(withDecorView(not(is(mActivityTestRule.
+                getActivity().getWindow().getDecorView())))).check(matches(isDisplayed()));
+    }
 
 
 

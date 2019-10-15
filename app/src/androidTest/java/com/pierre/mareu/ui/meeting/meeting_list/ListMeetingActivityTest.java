@@ -93,15 +93,15 @@ public class ListMeetingActivityTest {
     public void myMeetingList_byDefaultIsSortedByDate_shouldDisplayTheRightItemAtTheFirstPlace() {
         RecyclerView recyclerView = mActivityRule.getActivity().findViewById(R.id.list);
         TextView textView1 = recyclerView.getChildAt(0).findViewById(R.id.time_textView);
-        Assert.assertEquals("24/10 09:00",textView1.getText());
+        Assert.assertEquals("24/12 09:00",textView1.getText());
         TextView textView2 = recyclerView.getChildAt(1).findViewById(R.id.time_textView);
-        Assert.assertEquals("25/10 10:00",textView2.getText());
+        Assert.assertEquals("25/12 10:00",textView2.getText());
         TextView textView3 = recyclerView.getChildAt(2).findViewById(R.id.time_textView);
-        Assert.assertEquals("26/10 18:00",textView3.getText());
+        Assert.assertEquals("26/12 18:00",textView3.getText());
         TextView textView4 = recyclerView.getChildAt(3).findViewById(R.id.time_textView);
-        Assert.assertEquals("28/10 15:00",textView4.getText());
+        Assert.assertEquals("28/12 15:00",textView4.getText());
         TextView textView5 = recyclerView.getChildAt(4).findViewById(R.id.time_textView);
-        Assert.assertEquals("29/10 14:30",textView5.getText());
+        Assert.assertEquals("29/12 14:30",textView5.getText());
 
     }
     @Test
@@ -176,7 +176,7 @@ public class ListMeetingActivityTest {
         name.check(matches(withText("Réunion C")));
         //The meeting's date in the meeting's details is corresponding
         ViewInteraction date = onView(allOf(withId(R.id.dateEdit_TextView),isDisplayed()));
-        date.check(matches(withText("jeu. 24 octobre 2019")));
+        date.check(matches(withText("mar. 24 décembre 2019")));
         //The meeting's begin time in the meeting's details is corresponding
         ViewInteraction beginTime = onView(allOf(withId(R.id.beginTimeEdit_TextView),isDisplayed()));
         beginTime.check(matches(withText("09:00")));

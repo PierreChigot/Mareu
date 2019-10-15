@@ -48,8 +48,8 @@ public class ListMeetingViewModelTest {
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
 
         //viewModel.getUiModelsLiveData().observeForever(observer);
-        LocalDateTime dateTimeMeeting0 = LocalDateTime.of(2019, 11, 25, 10, 0);
-        LocalDateTime dateTimeEndMeeting0 = LocalDateTime.of(2019, 11, 25, 10, 45);
+        LocalDateTime dateTimeMeeting0 = LocalDateTime.of(2019, 12, 31, 10, 0);
+        LocalDateTime dateTimeEndMeeting0 = LocalDateTime.of(2019, 12, 31, 10, 45);
         Meeting meetingToAdd = new Meeting(12,"meetingToAdd",
                 dateTimeMeeting0, dateTimeEndMeeting0,"Salle", "meetingTestRoom");
         service.addMeeting(meetingToAdd);
@@ -74,7 +74,7 @@ public class ListMeetingViewModelTest {
         MeetingAPIService service = DI.getNewInstanceApiService();
         ListMeetingViewModel viewModel = new ListMeetingViewModel(service);
         assertNotNull(viewModel.getUiModelsLiveData().getValue());
-        assertEquals("24/10 09:00", viewModel.getUiModelsLiveData().getValue().get(0).getDate());
+        assertEquals("24/12 09:00", viewModel.getUiModelsLiveData().getValue().get(0).getDate());
     }
 
     @Test

@@ -147,8 +147,8 @@ public class MeetingDetailsViewModelTest {
 
 
         meetingDetailsViewModel.saveMeeting("Test name", "Salle 6",
-                LocalDateTime.of(2019, 10, 29, 14, 30),
-                LocalDateTime.of(2019, 10, 29, 15, 0), participants, -1);
+                LocalDateTime.of(2019, 12, 29, 14, 30),
+                LocalDateTime.of(2019, 12, 29, 15, 0), participants, -1);
 
 
         assertEquals(ViewAction.DISPLAY_ERROR_MEETING_ROOM,meetingDetailsViewModel.getViewActionMutableLiveData().getValue());
